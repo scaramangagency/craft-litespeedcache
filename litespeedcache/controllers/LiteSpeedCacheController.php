@@ -5,7 +5,7 @@ class LiteSpeedCacheController extends BaseController
 {
 
 	public function actionClearLiteSpeedCache()
-    {
+	{
 		$dir = '../.lscache';
 
 		craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
