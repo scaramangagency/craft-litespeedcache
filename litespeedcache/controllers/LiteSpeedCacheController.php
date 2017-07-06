@@ -4,7 +4,8 @@ namespace Craft;
 class LiteSpeedCacheController extends BaseController
 {
 
-	public function actionClearLiteSpeedCache() {
+	public function actionClearLiteSpeedCache()
+  {
 		$dir = '../.lscache';
 
 		craft()->liteSpeedCache->destroyLiteSpeedCache($dir);

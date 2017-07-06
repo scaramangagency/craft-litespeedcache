@@ -170,7 +170,7 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	}
 
 	public function clearLitespeedQueue()
-  {
+	{
 
 	  $results = craft()->db->createCommand()
 	            ->selectDistinct('path, id')
