@@ -33,10 +33,38 @@ class LiteSpeedCachePlugin extends BasePlugin
 	{
 		craft()->on('elements.onBeforeSaveElement', function(Event $event)
 		{
-			$dir = '../.lscache';
-			craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
+			$element = $event->params['element'];
+			$paths = craft()->liteSpeedCache->getPaths($element);
+
+			$result = craft()->db->createCommand()
+								->selectDistinct('path')
+								->from('lsclearance')
+								->queryColumn();
+
+			$urls = [];
+
+			foreach ((array) $paths as $path) {
+				$newPath = preg_replace('/site:/', '', $path['path'], 1);
+
+				if ($path['locale'] != 'en') {
+					$newPath = $path['locale'] . '/' . $newPath;
+				}
+
+				$newPath = UrlHelper::getSiteUrl($newPath);
+
+				if (!in_array($newPath, $result)) {
+					$urls[] = array($newPath);
+				}
+			}
+			$result = craft()->db->createCommand()->insertAll('lsclearance', array('path'), $urls);
 		});
 
+	}
+
+
+	craft()->on('elements.onAfterSaveElement', function(Event $event)
+	{
+		craft()->liteSpeedCache->clearLitespeedQueue();
 	}
 
 }

@@ -4,7 +4,7 @@
 {% set title = 'Clear Litespeed Cache'|t %}
 
 {% set content %}
-  <p>Force delete the cache.</p>
+  <p><strong>Please note:</strong> You should only need to clear the cache if you have updated a global item (i.e. the header or navigation).</p>
   <form method="post" action="">
     {{ getCsrfInput() }}
     <input type="hidden" name="action" value="liteSpeedCache/clearLitespeedCache" />
