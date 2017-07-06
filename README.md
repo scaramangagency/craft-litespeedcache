@@ -8,7 +8,7 @@ It's labour intensive, and requires you don't use `globally` (as we need the pat
 
 I never added a `LiteSpeedCacheRecord.php`, because I didn't get this working properly before settling on the blanket destroy option, so you'll need to add a new table to your database
 
-----
+~~~~
   CREATE TABLE `craft_lsclearance` (
       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
       `path` text,
@@ -18,5 +18,5 @@ I never added a `LiteSpeedCacheRecord.php`, because I didn't get this working pr
       `uid` char(36) DEFAULT '',
       PRIMARY KEY (`id`)
   ) ENGINE=InnoDB AUTO_INCREMENT=539 DEFAULT CHARSET=latin1;
-----
+~~~~
 
