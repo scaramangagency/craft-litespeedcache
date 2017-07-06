@@ -59,12 +59,10 @@ class LiteSpeedCachePlugin extends BasePlugin
 			$result = craft()->db->createCommand()->insertAll('lsclearance', array('path'), $urls);
 		});
 
-	}
-
-
-	craft()->on('elements.onAfterSaveElement', function(Event $event)
-	{
-		craft()->liteSpeedCache->clearLitespeedQueue();
+		craft()->on('elements.onSaveElement', function(Event $event)
+		{
+			craft()->liteSpeedCache->clearLitespeedQueue();
+		});
 	}
 
 }
