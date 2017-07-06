@@ -4,17 +4,6 @@ namespace Craft;
 class LiteSpeedCachePlugin extends BasePlugin
 {
 
-	// Properties
-	// =========================================================================
-
-	/**
-	 * @var
-	 */
-	private $_settings;
-
-	// Public Methods
-	// =========================================================================
-
 	public function getName()
 	{
 		return Craft::t('Litespeed Cache');
