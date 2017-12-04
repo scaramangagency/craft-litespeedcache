@@ -1,7 +1,3 @@
 # CraftCMS LiteSpeed Cache
 
-Destroy LiteSpeed cache on save, or force destroy.
-
-## Todo
-
-- Allow path to be entered manually
+This plugin will clear the entire LiteSpeed cache on save. It also allows you to force clear the entire cache manually.
