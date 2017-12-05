@@ -29,4 +29,5 @@ For any parameters that are **truly** global parameters, like navigation, prefix
 ~~~~
 
 ## Notes
+
 I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with duplicate cache records if there are URL paramaters defined for a page.
