@@ -1,22 +1,32 @@
 # CraftCMS LiteSpeed Cache
+~~~~
+**Doesnt work yet, PURGE command is not running correctly**
+~~~~
 
 Destroy LiteSpeed cache on save, or force destroy.
 
 **This will clear the cache based on URL's provided by Craft's native `deleteStaleTemplateCaches` method, as opposed to just a blanket destroy.**
 
-It's labour intensive, and requires you don't use `globally` (as we need the path to issue a PURGE request), so the cache table can really grow in size.
+It can be pretty processor intensive, so use with caution.
 
-I never added a `LiteSpeedCacheRecord.php`, because I didn't get this working properly before settling on the blanket destroy option, so you'll need to add a new table to your database
+## Usage
 
+Cache records need to have the path set as the key.
 ~~~~
-  CREATE TABLE `craft_lsclearance` (
-      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-      `path` text,
-      `cleared` int(11) DEFAULT '0',
-      `dateCreated` datetime DEFAULT NULL,
-      `dateUpdated` datetime DEFAULT NULL,
-      `uid` char(36) DEFAULT '',
-      PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=539 DEFAULT CHARSET=latin1;
+{% cache globally using key craft.request.path %}
+{% cache globally using key craft.request.path ~ '/p' ~ craft.request.getPageNum %}
 ~~~~
 
+If you need to add extra data to the key (e.g if you're using a different `limit` parameter for different browser sizes) then you must seperate this information from the path using `%%`
+~~~~
+{% set cacheKeyType = craft.request.isMobileBrowser() ? 'mobile' : 'desktop' %}
+{% cache globally using key craft.request.path ~ '/p' ~ craft.request.getPageNum ~ '%%' ~ cacheKeyType until cacheUntil %}
+~~~~
+
+For any parameters that are **truly** global parameters, like navigation, prefix the key with `global%%`. This will trigger a blanket destroy instead of per-URL, as every page will need to be refreshed for navigation changes to take effect.
+~~~~
+{% cache globally using key 'global%%navigation' %}
+~~~~
+
+## Notes
+I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with duplicate cache records if there are URL paramaters defined for a page.
