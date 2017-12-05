@@ -1,0 +1,11 @@
+{% import "_includes/forms" as forms %}
+
+{{  forms.lightswitchField({
+        label: "Clear caches per URL?"|t,
+        id: 'lsPerUrl',
+        name: 'lsPerUrl',
+        value: settings.lsPerUrl,
+        required: true,
+        on: (settings.lsPerUrl is defined) ? settings.lsPerUrl : ""
+    })
+}}

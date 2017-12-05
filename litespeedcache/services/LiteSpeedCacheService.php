@@ -4,10 +4,6 @@ namespace Craft;
 class LiteSpeedCacheService extends BaseApplicationComponent
 {
 
-	/*
-		getPaths() and _getQuery() are mostly inherited from supercool's cacheMonster plugin
-		https://github.com/supercool/Cache-Monster
-	*/
 	private $_elementIds;
 	private $_elementType;
 	private $_batch;
@@ -16,6 +12,18 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	private $_cacheIdsToBeDeleted;
 	private $_totalCriteriaRowsToBeDeleted;
 
+	/**
+	 * Gets the caches that are about to be deleted by the DeleteStaleTemplateCachesTask
+	 * and returns the paths for them.
+	 *
+	 * I basically nicked the logic from supercools cacheMonster plugin [https://github.com/supercool/Cache-Monster]
+	 * Who basically nicked the logic from the DeleteStaleTemplateCachesTask
+	 * to work out which caches we are dealing with.
+	 *
+	 * @method getPaths
+	 * @param  int           $element the element we want to purge
+	 * @return array                  an array of paths to purge
+	 */
 	public function getPaths($element)
 	{
 		$elementId = $element->id;
@@ -107,12 +115,11 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 		{
 
 			// Get the paths that those caches related to
-			$query = craft()->db->createCommand()
-				->selectDistinct('path, locale')
+			$paths = craft()->db->createCommand()
+				->selectDistinct('cacheKey, path, locale')
 				->from('templatecaches')
-				->where(array('in', 'id', $this->_cacheIdsToBeDeleted));
-
-			$paths = $query->queryAll();
+				->where(array('in', 'id', $this->_cacheIdsToBeDeleted))
+				->queryAll();
 
 			// Return an array of them
 			if ($paths) {
@@ -131,6 +138,11 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 		}
 	}
 
+	/**
+	 * Returns a DbCommand object for selecting criteria that could be dropped by this task.
+	 *
+	 * @return DbCommand
+	 */
 	private function _getQuery()
 	{
 		$query = craft()->db->createCommand()
@@ -146,54 +158,62 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 		return $query;
 	}
 
+	/**
+	 * Recursively delete the entire .lscache directory at the root level
+	 */
 	public function destroyLiteSpeedCache($dir, $odir = NULL)
 	{
-	   if ($odir == NULL) {
-	   	$odir = $dir;
-	   }
-	   if (is_dir($dir)) {
-	     $objects = scandir($dir);
-	     foreach ($objects as $object) {
-	       if ($object != "." && $object != "..") {
-	         if (is_dir($dir."/".$object))
-	           craft()->liteSpeedCache->destroyLiteSpeedCache($dir."/".$object,$odir);
-	         else
-	           unlink($dir."/".$object);
-	       }
-	     }
-	     if ($odir != $dir) {
-	         rmdir($dir);
-	     }
-	   }
+		if ($odir == NULL) {
+	   		$odir = $dir;
+	   	}
+	   	if (is_dir($dir)) {
+		 	$objects = scandir($dir);
+		 	foreach ($objects as $object) {
+		   		if ($object != "." && $object != "..") {
+			 		if (is_dir($dir."/".$object))
+			   			craft()->liteSpeedCache->destroyLiteSpeedCache($dir."/".$object,$odir);
+			 		else
+			   			unlink($dir."/".$object);
+		   			}
+		 		}
+			if ($odir != $dir) {
+				rmdir($dir);
+			}
+	   	}
 
-	   return true;
+	   	return true;
 	}
 
+	/**
+	 * Loop through cache records we need to clear, and fire a PURGE request for each one
+	 */
 	public function clearLitespeedQueue()
 	{
 
-	  $results = craft()->db->createCommand()
-	            ->selectDistinct('path, id')
-	            ->from('lsclearance')
-	            ->queryAll();
+	  	$results = craft()->db->createCommand()
+					->selectDistinct('path, id')
+					->from('lsclearance')
+					->queryAll();
 
-	  foreach ($results as $result) {
-	    $fp = fsockopen('127.0.0.1', '80', $errno, $errstr, 2);
-	    if (!$fp) {
-	        echo "$errstr ($errno)\n";
-	    } else {
-	      $out = "PURGE " . $result['path'] . " HTTP/1.0\r\n"
-	           . "Host: https://www.host.com\r\n"
-	           . "Connection: Close\r\n\r\n";
-	      fwrite($fp, $out);
-	      while (!feof($fp)) {
-	          echo fgets($fp, 128);
-	      }
-	      fclose($fp);
+	  	foreach ($results as $result) {
+			$fp = fsockopen('127.0.0.1', '80', $errno, $errstr, 2);
+			if (!$fp) {
+				echo "$errstr ($errno)\n";
+			} else {
 
-	      $remove = craft()->db->createCommand()->delete('lsclearance', 'id=:id', array(':id'=>$result['id']));
-	    }
-	  }
+		  		$out = "PURGE " . $result['path'] . " HTTP/1.0\r\n"
+			   		. "Host: ". craft()->getSiteUrl() ."\r\n"
+			   		. "Connection: Close\r\n\r\n";
+		  		echo $out;
+		  		fwrite($fp, $out);
+		  		while (!feof($fp)) {
+			  		echo fgets($fp, 128);
+		  		}
+		  		fclose($fp);
+
+		  		$remove = craft()->db->createCommand()->delete('lsclearance', 'id=:id', array(':id'=>$result['id']));
+			}
+	  	}
 	}
 
 }

@@ -29,40 +29,76 @@ class LiteSpeedCachePlugin extends BasePlugin
 	    return true;
 	}
 
+	protected function defineSettings()
+	{
+	    return array(
+	        'lsPerUrl' => array(AttributeType::String, 'default' => 0)
+	    );
+	}
+
+	public function getSettingsHtml()
+	{
+	   return craft()->templates->render('litespeedcache/settings', array(
+	       'settings' => $this->getSettings()
+	   ));
+	}
+
 	public function init()
 	{
+		/**
+		 * onBeforeSaveElement, grab the paths we need to clear from Craft and add them to the lsclearance table
+		 */
 		craft()->on('elements.onBeforeSaveElement', function(Event $event)
 		{
-			$element = $event->params['element'];
-			$paths = craft()->liteSpeedCache->getPaths($element);
+			// If we are clearing per URL
+			if (craft()->liteSpeedCache->getSettings()->lsPerUrl) {
+				$element = $event->params['element'];
+				$paths = craft()->liteSpeedCache->getPaths($element);
 
-			$result = craft()->db->createCommand()
-								->selectDistinct('path')
-								->from('lsclearance')
-								->queryColumn();
+				$result = craft()->db->createCommand()
+									->selectDistinct('path')
+									->from('lsclearance')
+									->queryColumn();
 
-			$urls = [];
+				$urls = [];
 
-			foreach ((array) $paths as $path) {
-				$newPath = preg_replace('/site:/', '', $path['path'], 1);
+				foreach ((array) $paths as $path) {
+					// If one of the records has been tagged as global, delete the lot
+					if (strpos($path['cacheKey'], 'global%%') !== false) {
+						$dir = '../.lscache';
 
-				if ($path['locale'] != 'en') {
-					$newPath = $path['locale'] . '/' . $newPath;
+						craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
+						return true;
+					}
+
+					// Otherwise get the URL from the cacheKey
+					// (which needs the key to be craft.request.path)
+					$newPath = explode('%%', $path['cacheKey']);
+					$newPath = UrlHelper::getSiteUrl($newPath[0]);
+					if (!in_array($newPath, $result)) {
+						$urls[] = array($newPath);
+					}
 				}
 
-				$newPath = UrlHelper::getSiteUrl($newPath);
-
-				if (!in_array($newPath, $result)) {
-					$urls[] = array($newPath);
-				}
+				$result = craft()->db->createCommand()->insertAll('lsclearance', array('path'), $urls);
 			}
-			$result = craft()->db->createCommand()->insertAll('lsclearance', array('path'), $urls);
 		});
 
+		/**
+		 * Run the PURGE commands
+		 */
 		craft()->on('elements.onSaveElement', function(Event $event)
 		{
-			craft()->liteSpeedCache->clearLitespeedQueue();
+			// If we are clearing per URL
+			if (craft()->liteSpeedCache->getSettings()->lsPerUrl) {
+				craft()->liteSpeedCache->clearLitespeedQueue();
+			} else {
+				$dir = '../.lscache';
+
+				craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
+			}
 		});
 	}
+
 
 }

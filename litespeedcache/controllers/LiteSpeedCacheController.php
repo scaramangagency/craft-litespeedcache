@@ -4,6 +4,11 @@ namespace Craft;
 class LiteSpeedCacheController extends BaseController
 {
 
+  /**
+   * Delete the entire LS Cache when triggered manually from the CP
+   *
+   * @return redirect to form defined URL
+   */
 	public function actionClearLiteSpeedCache()
 	{
 		$dir = '../.lscache';
