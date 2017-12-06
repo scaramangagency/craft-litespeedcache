@@ -2,9 +2,11 @@
 
 Destroy LiteSpeed cache on save, or force destroy.
 
-## Settings
+## Installation
 
-Only the one, *Clear caches per URL?*. It'll be switched off by default.
+1. Move the litespeedcache folder into your craft/plugins directory
+2. Install the plugin in the Control Panel
+3. Turn on *Clear caches per URL?* if you need it on the settings page.
 
 ## Markup
 
@@ -28,3 +30,7 @@ For any parameters that are **truly** global parameters, like navigation, prefix
 ## Notes
 
 I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with hunderds of cache records if there are URL paramaters defined for a page. This plugin can also be pretty processor intensive, so test if you experience huge slowdowns whilst using *Clear caches per URL*
+
+## Support
+
+If you're having issues with the *Clear caches per URL*, switch it off and default back to the blanket deletion.
