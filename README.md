@@ -22,15 +22,13 @@ If you need to add extra data to the key (e.g if you're using a different `limit
 {% cache globally using key craft.request.path ~ '/p' ~ craft.request.getPageNum ~ '%%' ~ cacheKeyType until cacheUntil %}
 ~~~~
 
-For any parameters that are **truly** global parameters, like navigation, prefix the key with `global%%`. This will trigger a blanket destroy instead of per-URL, as every page will need to be refreshed for navigation changes to take effect.
+For any parameters that are **truly** global parameters, like navigation, prefix the key with `global%%`. This will trigger a global purge instead of purging per URL, as every page will need to be refreshed for navigation changes to take effect.
 ~~~~
 {% cache globally using key 'global%%navigation' %}
 ~~~~
 
 ## Notes
 
-I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with hunderds of cache records if there are URL paramaters defined for a page. This plugin can also be pretty processor intensive, so test if you experience huge slowdowns whilst using *Clear caches per URL*
+I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with hunderds of cache records if there are URL paramaters defined for a page.
 
-## Support
-
-If you're having issues with the *Clear caches per URL*, switch it off and default back to the blanket deletion.
+This plugin does run the LSCache clearances as a batched task, so hopefully it shouldn't be too intensive on the server. If you're noticing massive latency issues, it might be worth knocking it back to global purging.
