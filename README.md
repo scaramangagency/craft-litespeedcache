@@ -1,6 +1,6 @@
-# CraftCMS LiteSpeed Cache
+# CraftCMS LSCache Purge
 
-Destroy LiteSpeed cache on save, or force destroy.
+Destroy LSCache on save, or force destroy.
 
 ## Installation
 
