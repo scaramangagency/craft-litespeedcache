@@ -11,7 +11,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '1.0.0';
+		return '1.2.0';
 	}
 
 	public function getDeveloper()
@@ -21,7 +21,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 
 	public function getDeveloperUrl()
 	{
-		return 'http://thoughtfulweb.com';
+		return 'https://www.thoughtfulweb.com';
 	}
 
 	public function hasCpSection()
