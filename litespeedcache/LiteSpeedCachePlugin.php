@@ -100,8 +100,9 @@ class LiteSpeedCachePlugin extends BasePlugin
 
 				foreach ($paths as $path)
 				{
-					$cleanPaths = $path['path'];
+					$cleanPaths[] = $path['path'];
 				}
+
 				craft()->liteSpeedCache->makeTask('LiteSpeedCache_Purge', $cleanPaths);
 			} else {
 				$dir = '../.lscache';
