@@ -1,15 +1,12 @@
 # CraftCMS LiteSpeed Cache
-~~~~
-**Doesnt work yet, PURGE command is not running correctly**
-~~~~
 
 Destroy LiteSpeed cache on save, or force destroy.
 
-**This will clear the cache based on URL's provided by Craft's native `deleteStaleTemplateCaches` method, as opposed to just a blanket destroy.**
+## Settings
 
-It can be pretty processor intensive, so use with caution.
+Only the one, *Clear caches per URL?*. It'll be switched off by default.
 
-## Usage
+## Markup
 
 Cache records need to have the path set as the key.
 ~~~~
@@ -30,4 +27,4 @@ For any parameters that are **truly** global parameters, like navigation, prefix
 
 ## Notes
 
-I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with duplicate cache records if there are URL paramaters defined for a page.
+I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with hunderds of cache records if there are URL paramaters defined for a page. This plugin can also be pretty processor intensive, so test if you experience huge slowdowns whilst using *Clear caches per URL*
