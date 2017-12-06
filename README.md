@@ -27,6 +27,13 @@ For any parameters that are **truly** global parameters, like navigation, prefix
 {% cache globally using key 'global%%navigation' %}
 ~~~~
 
+On your _default_ document, you must add a header to tell LSCache to **not** cache the entry if it cannot find a cache record in craft_templatecaches table. If there is no cache record associated with the entry, pressing save will not fire a purge request to the URL.
+~~~~
+{% if entry is defined and not craft.liteSpeedCache.checkTemplateCache(craft.request.path)|length %}
+    {% header "X-LiteSpeed-Cache-Control: no-cache" %}
+{% endif %}
+~~~~
+
 ## Notes
 
 I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with hunderds of cache records if there are URL paramaters defined for a page.
