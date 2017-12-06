@@ -16,7 +16,7 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	 * Gets the caches that are about to be deleted by the DeleteStaleTemplateCachesTask
 	 * and returns the paths for them.
 	 *
-	 * I basically nicked the logic from supercools cacheMonster plugin [https://github.com/supercool/Cache-Monster]
+	 * I basically nicked the logic from supercool's cacheMonster plugin [https://github.com/supercool/Cache-Monster]
 	 * Who basically nicked the logic from the DeleteStaleTemplateCachesTask
 	 * to work out which caches we are dealing with.
 	 *

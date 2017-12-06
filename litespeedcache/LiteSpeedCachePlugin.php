@@ -85,7 +85,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 		});
 
 		/**
-		 * Run the PURGE commands
+		 * Run the PURGE commands as a batched task
 		 */
 		craft()->on('elements.onSaveElement', function(Event $event)
 		{

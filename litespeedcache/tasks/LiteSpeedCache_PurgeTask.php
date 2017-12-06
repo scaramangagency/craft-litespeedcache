@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-// Nicked from supercools cacheMonster plugin [https://github.com/supercool/Cache-Monster]
+// getTotalSteps nicked from supercool's cacheMonster plugin [https://github.com/supercool/Cache-Monster]
 
 class LiteSpeedCache_PurgeTask extends BaseTask
 {
