@@ -196,24 +196,20 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 					->queryAll();
 
 	  	foreach ($results as $result) {
-			$fp = fsockopen('127.0.0.1', '80', $errno, $errstr, 2);
-			if (!$fp) {
-				echo "$errstr ($errno)\n";
-			} else {
 
-		  		$out = "PURGE " . $result['path'] . " HTTP/1.0\r\n"
-			   		. "Host: ". craft()->getSiteUrl() ."\r\n"
-			   		. "Connection: Close\r\n\r\n";
-		  		echo $out;
-		  		fwrite($fp, $out);
-		  		while (!feof($fp)) {
-			  		echo fgets($fp, 128);
-		  		}
-		  		fclose($fp);
+	  		$ch = curl_init();
 
-		  		$remove = craft()->db->createCommand()->delete('lsclearance', 'id=:id', array(':id'=>$result['id']));
-			}
-	  	}
+	  		// Set query data here with the URL
+	  		curl_setopt($ch, CURLOPT_URL, $result['path']);
+	  		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	  		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+
+	  		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PURGE");
+	  		curl_exec($ch);
+	  		curl_close($ch);
+
+		  	$remove = craft()->db->createCommand()->delete('lsclearance', 'id=:id', array(':id'=>$result['id']));
+		}
 	}
 
 }
