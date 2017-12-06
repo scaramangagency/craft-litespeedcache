@@ -208,7 +208,15 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 		}
 	}
 
+	public function checkTemplateCache($slug = null) {
+		$query = craft()->db->createCommand()
+			->selectDistinct('cacheKey')
+			->from('templatecaches')
+			->where('cacheKey LIKE :slug', array(':slug' => '%'.$slug.'%'))
+			->queryAll();
 
+		return sizeof($query);
+	}
 
 	/**
 	 * Returns a DbCommand object for selecting criteria that could be dropped by this task.
