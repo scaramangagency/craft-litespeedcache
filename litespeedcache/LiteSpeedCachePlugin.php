@@ -91,7 +91,18 @@ class LiteSpeedCachePlugin extends BasePlugin
 		{
 			// If we are clearing per URL
 			if ($this->getSettings()->lsPerUrl) {
-				craft()->liteSpeedCache->clearLitespeedQueue();
+				$paths = craft()->db->createCommand()
+				          ->selectDistinct('path, id')
+				          ->from('lsclearance')
+				          ->queryAll();
+
+				$cleanPaths = [];
+
+				foreach ($paths as $path)
+				{
+					$cleanPaths = $path['path'];
+				}
+				craft()->liteSpeedCache->makeTask('LiteSpeedCache_Purge', $cleanPaths);
 			} else {
 				$dir = '../.lscache';
 

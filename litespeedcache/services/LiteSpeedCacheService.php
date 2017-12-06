@@ -139,26 +139,6 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Returns a DbCommand object for selecting criteria that could be dropped by this task.
-	 *
-	 * @return DbCommand
-	 */
-	private function _getQuery()
-	{
-		$query = craft()->db->createCommand()
-			->from('templatecachecriteria');
-		if (is_array($this->_elementType))
-		{
-			$query->where(array('in', 'type', $this->_elementType));
-		}
-		else
-		{
-			$query->where('type = :type', array(':type' => $this->_elementType));
-		}
-		return $query;
-	}
-
-	/**
 	 * Recursively delete the entire .lscache directory at the root level
 	 */
 	public function destroyLiteSpeedCache($dir, $odir = NULL)
@@ -185,31 +165,69 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Loop through cache records we need to clear, and fire a PURGE request for each one
+	 * Registers a Task with Craft, taking into account if there
+	 * is already one pending
+	 *
+	 * Nicked from supercools cacheMonster plugin [https://github.com/supercool/Cache-Monster]
+	 *
+	 * @method makeTask
+	 * @param  string    $taskName   the name of the Task you want to register
+	 * @param  array     $paths      an array of paths that should go in that Tasks settings
 	 */
-	public function clearLitespeedQueue()
+	public function makeTask($taskName, $paths)
 	{
-
-	  	$results = craft()->db->createCommand()
-					->selectDistinct('path, id')
-					->from('lsclearance')
-					->queryAll();
-
-	  	foreach ($results as $result) {
-
-	  		$ch = curl_init();
-
-	  		// Set query data here with the URL
-	  		curl_setopt($ch, CURLOPT_URL, $result['path']);
-	  		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	  		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-
-	  		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PURGE");
-	  		curl_exec($ch);
-	  		curl_close($ch);
-
-		  	$remove = craft()->db->createCommand()->delete('lsclearance', 'id=:id', array(':id'=>$result['id']));
+		// If there are any pending tasks, just append the paths to it
+		$task = craft()->tasks->getNextPendingTask($taskName);
+		if ($task && is_array($task->settings))
+		{
+			$settings = $task->settings;
+			if (!is_array($settings['paths']))
+			{
+				$settings['paths'] = array($settings['paths']);
+			}
+			if (is_array($paths))
+			{
+				$settings['paths'] = array_merge($settings['paths'], $paths);
+			}
+			else
+			{
+				$settings['paths'][] = $paths;
+			}
+			// Make sure there aren't any duplicate paths
+			$settings['paths'] = array_unique($settings['paths']);
+			// Set the new settings and save the task
+			$task->settings = $settings;
+			craft()->tasks->saveTask($task, false);
 		}
+		else
+		{
+
+			craft()->tasks->createTask($taskName, null, array(
+				'paths' => $paths
+			));
+		}
+	}
+
+
+
+	/**
+	 * Returns a DbCommand object for selecting criteria that could be dropped by this task.
+	 *
+	 * @return DbCommand
+	 */
+	private function _getQuery()
+	{
+		$query = craft()->db->createCommand()
+			->from('templatecachecriteria');
+		if (is_array($this->_elementType))
+		{
+			$query->where(array('in', 'type', $this->_elementType));
+		}
+		else
+		{
+			$query->where('type = :type', array(':type' => $this->_elementType));
+		}
+		return $query;
 	}
 
 }
