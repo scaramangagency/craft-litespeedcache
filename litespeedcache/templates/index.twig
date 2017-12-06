@@ -4,13 +4,13 @@
 {% set title = 'Clear Litespeed Cache'|t %}
 
 {% set content %}
-  <p>Force delete the cache.</p>
-  <form method="post" action="">
-    {{ getCsrfInput() }}
-    <input type="hidden" name="action" value="liteSpeedCache/clearLitespeedCache" />
-    <input type="hidden" name="redirect" value="litespeedcache" />
-    <div class="buttons">
-      <input type="submit" class="btn submit" value="{{ 'Clear LiteSpeed Cache'|t }}">
-    </div>
-  </form>
+  	<p>Force clear the cache</p>
+	  	<form method="post" action="">
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="liteSpeedCache/clearLitespeedCache" />
+		<input type="hidden" name="redirect" value="litespeedcache" />
+		<div class="buttons">
+		 	<input type="submit" class="btn submit" value="{{ 'Clear LiteSpeed Cache'|t }}">
+		</div>
+  	</form>
 {% endset %}
