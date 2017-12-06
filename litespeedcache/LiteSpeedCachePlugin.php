@@ -51,7 +51,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 		craft()->on('elements.onBeforeSaveElement', function(Event $event)
 		{
 			// If we are clearing per URL
-			if (craft()->liteSpeedCache->getSettings()->lsPerUrl) {
+			if ($this->getSettings()->lsPerUrl) {
 				$element = $event->params['element'];
 				$paths = craft()->liteSpeedCache->getPaths($element);
 
@@ -90,7 +90,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 		craft()->on('elements.onSaveElement', function(Event $event)
 		{
 			// If we are clearing per URL
-			if (craft()->liteSpeedCache->getSettings()->lsPerUrl) {
+			if ($this->getSettings()->lsPerUrl) {
 				craft()->liteSpeedCache->clearLitespeedQueue();
 			} else {
 				$dir = '../.lscache';
