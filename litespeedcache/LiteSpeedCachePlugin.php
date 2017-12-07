@@ -71,16 +71,27 @@ class LiteSpeedCachePlugin extends BasePlugin
 						return true;
 					}
 
+					if (is_null($path['locale'])) {
+						$path['locale'] = craft()->i18n->getPrimarySiteLocale();
+					}
+
 					// Otherwise get the URL from the cacheKey
 					// (which needs the key to be craft.request.path)
 					$newPath = explode('%%', $path['cacheKey']);
-					$newPath = UrlHelper::getSiteUrl($newPath[0]);
+
+					// Add the locale to the URL if we need to
+					if ($path['locale'] != craft()->i18n->getPrimarySiteLocale()) {
+						$newPath = UrlHelper::getSiteUrl($newPath[0], null, null, $path['locale']);
+					} else {
+						$newPath = UrlHelper::getSiteUrl($newPath[0]);
+					}
+
 					if (!in_array($newPath, $result)) {
-						$urls[] = array($newPath);
+						$urls[] = array($newPath, $path['locale']);
 					}
 				}
 
-				$result = craft()->db->createCommand()->insertAll('lsclearance', array('path'), $urls);
+				$result = craft()->db->createCommand()->insertAll('lsclearance', array('path', 'locale'), $urls);
 			}
 		});
 
@@ -92,7 +103,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 			// If we are clearing per URL
 			if ($this->getSettings()->lsPerUrl) {
 				$paths = craft()->db->createCommand()
-				          ->selectDistinct('path, id')
+				          ->selectDistinct('path, id, locale')
 				          ->from('lsclearance')
 				          ->queryAll();
 

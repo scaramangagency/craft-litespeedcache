@@ -13,6 +13,7 @@ class LiteSpeedCacheRecord extends BaseRecord
     {
         return array(
             'path' => array(AttributeType::String, 'required' => true),
+            'locale' => array(AttributeType::String, 'required' => true),
             'cleared' => array(AttributeType::String, 'required' => true)
         );
     }
