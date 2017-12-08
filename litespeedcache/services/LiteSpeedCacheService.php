@@ -26,7 +26,7 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	 */
 	public function getPaths($element)
 	{
-		$elementId = $element->id;
+		$elementId = $element[0]->id;
 
 		// What type of element(s) are we dealing with?
 		$this->_elementType = craft()->elements->getElementTypeById($elementId);
@@ -206,6 +206,12 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 				'paths' => $paths
 			));
 		}
+	}
+
+	public function buildPaths($taskName, $element) {
+		craft()->tasks->createTask($taskName, null, array(
+			'element' => $element
+		));
 	}
 
 	public function checkTemplateCache($slug = null) {

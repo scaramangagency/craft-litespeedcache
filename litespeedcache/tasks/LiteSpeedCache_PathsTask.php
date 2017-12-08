@@ -3,7 +3,7 @@ namespace Craft;
 
 // getTotalSteps nicked from supercool's cacheMonster plugin [https://github.com/supercool/Cache-Monster]
 
-class LiteSpeedCache_PurgeTask extends BaseTask
+class LiteSpeedCache_PathsTask extends BaseTask
 {
 
   // Properties
@@ -26,7 +26,7 @@ class LiteSpeedCache_PurgeTask extends BaseTask
    */
   public function getDescription()
   {
-    return Craft::t('Purging the LS Cache');
+    return Craft::t('Retrieving cached elements');
   }
 
   /**
@@ -37,19 +37,7 @@ class LiteSpeedCache_PurgeTask extends BaseTask
   public function getTotalSteps()
   {
 
-
-    // Get the actual paths out of the settings
-    $paths = $this->getSettings()->paths;
-
-    // Make our internal paths array
-    $this->_paths = array();
-
-    // Split the $paths array into chunks of 20 - each step
-    // will be a batch of 20 requests
-    $this->_paths = array_chunk($paths, 20);
-
-    // Count our final chunked array
-    return count($this->_paths);
+    return 1;
   }
 
   /**
@@ -62,11 +50,45 @@ class LiteSpeedCache_PurgeTask extends BaseTask
   public function runStep($step)
   {
 
-    // Loop the paths in this step
+    $paths = craft()->liteSpeedCache->getPaths($this->getSettings()->element);
 
-    $mh = curl_multi_init();
+    foreach ($paths as $path) {
+      // If one of the records has been tagged as global, delete the lot
+      if (strpos($path['cacheKey'], 'global%%') !== false) {
+        $dir = '../.lscache';
 
-    foreach ($this->_paths[$step] as $key=>$path)
+        craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
+        return true;
+      }
+
+      if (is_null($path['locale'])) {
+        $path['locale'] = craft()->i18n->getPrimarySiteLocale();
+      }
+
+      // Otherwise get the URL from the cacheKey
+      // (which needs the key to be craft.request.path)
+      $newPath = explode('%%', $path['cacheKey']);
+
+      // Add the locale to the URL if we need to
+      if ($path['locale'] != craft()->i18n->getPrimarySiteLocale()) {
+        $newPath = UrlHelper::getSiteUrl($newPath[0], null, null, $path['locale']);
+      } else {
+        $newPath = UrlHelper::getSiteUrl($newPath[0]);
+      }
+
+      LiteSpeedCachePlugin::log($newPath);
+
+      if (!in_array($newPath, $result)) {
+        $cleanPaths[] = $newPath;
+        $urls[] = array($newPath, $path['locale']);
+      }
+    }
+
+
+
+    $result = craft()->db->createCommand()->insertAll('lsclearance', array('path', 'locale'), $urls);
+
+    foreach ($cleanPaths as $key=>$path)
     {
       $ch[$key] = curl_init();
 
@@ -76,7 +98,7 @@ class LiteSpeedCache_PurgeTask extends BaseTask
       curl_setopt($ch[$key], CURLOPT_TIMEOUT, 3);
 
       curl_setopt($ch[$key], CURLOPT_CUSTOMREQUEST, "PURGE");
-      $remove = craft()->db->createCommand()->delete('lsclearance', 'path=:path', array(':path'=>$path));
+      // $remove = craft()->db->createCommand()->delete('lsclearance', 'path=:path', array(':path'=>$path));
 
       curl_multi_add_handle($mh, $ch[$key]);
     }
@@ -92,8 +114,8 @@ class LiteSpeedCache_PurgeTask extends BaseTask
 
     curl_multi_close($mh);
 
-    return true;
 
+    return true;
   }
 
   // Protected Methods
@@ -107,7 +129,7 @@ class LiteSpeedCache_PurgeTask extends BaseTask
   protected function defineSettings()
   {
     return array(
-      'paths'  => AttributeType::Mixed
+      'element'  => AttributeType::Mixed
     );
   }
 

@@ -3,7 +3,7 @@ namespace Craft;
 
 // getTotalSteps nicked from supercool's cacheMonster plugin [https://github.com/supercool/Cache-Monster]
 
-class LiteSpeedCache_PurgeTask extends BaseTask
+class LiteSpeedCache_BuildTask extends BaseTask
 {
 
   // Properties
@@ -26,7 +26,7 @@ class LiteSpeedCache_PurgeTask extends BaseTask
    */
   public function getDescription()
   {
-    return Craft::t('Purging the LS Cache');
+    return Craft::t('Building a URL list');
   }
 
   /**
@@ -63,37 +63,47 @@ class LiteSpeedCache_PurgeTask extends BaseTask
   {
 
     // Loop the paths in this step
+    $result = craft()->db->createCommand()
+              ->selectDistinct('path')
+              ->from('lsclearance')
+              ->queryColumn();
 
-    $mh = curl_multi_init();
+    $urls = [];
+    $cleanPaths = [];
 
-    foreach ($this->_paths[$step] as $key=>$path)
-    {
-      $ch[$key] = curl_init();
+    foreach ($this->_paths[$step] as $path) {
+      // If one of the records has been tagged as global, delete the lot
+      if (strpos($path['cacheKey'], 'global%%') !== false) {
+        $dir = '../.lscache';
 
-      // Set query data here with the URL
-      curl_setopt($ch[$key], CURLOPT_URL, $path);
-      curl_setopt($ch[$key], CURLOPT_RETURNTRANSFER, 1);
-      curl_setopt($ch[$key], CURLOPT_TIMEOUT, 3);
+        craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
+        return true;
+      }
 
-      curl_setopt($ch[$key], CURLOPT_CUSTOMREQUEST, "PURGE");
-      $remove = craft()->db->createCommand()->delete('lsclearance', 'path=:path', array(':path'=>$path));
+      if (is_null($path['locale'])) {
+        $path['locale'] = craft()->i18n->getPrimarySiteLocale();
+      }
 
-      curl_multi_add_handle($mh, $ch[$key]);
+      // Otherwise get the URL from the cacheKey
+      // (which needs the key to be craft.request.path)
+      $newPath = explode('%%', $path['cacheKey']);
+
+      // Add the locale to the URL if we need to
+      if ($path['locale'] != craft()->i18n->getPrimarySiteLocale()) {
+        $newPath = UrlHelper::getSiteUrl($newPath[0], null, null, $path['locale']);
+      } else {
+        $newPath = UrlHelper::getSiteUrl($newPath[0]);
+      }
+
+      if (!in_array($newPath, $result)) {
+        $cleanPaths[] = $newPath;
+        $urls[] = array($newPath, $path['locale']);
+      }
     }
 
-    do {
-      curl_multi_exec($mh, $running);
-      curl_multi_select($mh);
-    } while ($running > 0);
-
-    foreach(array_keys($ch) as $key){
-      curl_multi_remove_handle($mh, $ch[$key]);
-    }
-
-    curl_multi_close($mh);
+    $result = craft()->db->createCommand()->insertAll('lsclearance', array('path', 'locale'), $urls);
 
     return true;
-
   }
 
   // Protected Methods
