@@ -19,7 +19,7 @@ Cache records need to have the path set as the key.
 If you need to add extra data to the key (e.g if you're using a different `limit` parameter for different browser sizes) then you must seperate this information from the path using `%%`
 ~~~~
 {% set cacheKeyType = craft.request.isMobileBrowser() ? 'mobile' : 'desktop' %}
-{% cache globally using key craft.request.path ~ '/p' ~ craft.request.getPageNum ~ '%%' ~ cacheKeyType until cacheUntil %}
+{% cache globally using key craft.request.path ~ '/p' ~ craft.request.getPageNum ~ '%%' ~ cacheKeyType %}
 ~~~~
 
 For any parameters that are **truly** global parameters, like navigation, prefix the key with `global%%`. This will trigger a global purge instead of purging per URL, as every page will need to be refreshed for navigation changes to take effect.
@@ -36,6 +36,6 @@ On your _default_ document, you must add a header to tell LSCache to **not** cac
 
 ## Notes
 
-I'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with hunderds of cache records if there are URL paramaters defined for a page.
+We'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with hunderds of cache records if there are URL paramaters defined for a page.
 
-This plugin does run the LSCache clearances as a batched task, so hopefully it shouldn't be too intensive on the server. If you're noticing massive latency issues, it might be worth knocking it back to global purging.
+This plugin does run the LSCache clearances as a batched task, so hopefully it shouldn't be too intensive on the server. If you're noticing massive latency issues, it might be worth selecting the global purging option.
