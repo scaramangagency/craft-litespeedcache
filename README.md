@@ -6,7 +6,8 @@ Destroy LSCache on save, or force destroy.
 
 1. Move the litespeedcache folder into your craft/plugins directory
 2. Install the plugin in the Control Panel
-3. Turn on *Clear caches per URL?* if you need it on the settings page.
+3. Set your LS Cache folder path on the settings page, you may need to ask your host where this is
+4. Turn on *Clear caches per URL?* if you need it on the settings page
 
 ## Markup
 
@@ -39,3 +40,5 @@ On your _default_ document, you must add a header to tell LSCache to **not** cac
 We'd recommend setting `globally` to reduce the amount of cache records that you get, otherwise you'll end up with hunderds of cache records if there are URL paramaters defined for a page.
 
 This plugin does run the LSCache clearances as a batched task, so hopefully it shouldn't be too intensive on the server. If you're noticing massive latency issues, it might be worth selecting the global purging option.
+
+If you're running CraftCommerce, the plugin will globally purge for now.
