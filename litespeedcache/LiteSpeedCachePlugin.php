@@ -11,7 +11,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '1.2.0';
+		return '1.3.0';
 	}
 
 	public function getDeveloper()
@@ -29,6 +29,28 @@ class LiteSpeedCachePlugin extends BasePlugin
 	    return true;
 	}
 
+	public function getDescription()
+	{
+	    return 'Clear the LS Cache on save in Craft CMS.';
+	}
+
+	public function getDocumentationUrl()
+	{
+	    return 'hhttps://github.com/thoughtfulweb/craft-litespeedcache';
+	}
+
+	public function getReleaseFeedUrl()
+	{
+	    return 'https://github.com/thoughtfulweb/craft-litespeedcache/master/releases.json';
+	}
+
+	public function getSettingsHtml()
+	{
+	   return craft()->templates->render('litespeedcache/settings', array(
+	       'settings' => $this->getSettings(),
+	   ));
+	}
+
 	protected function defineSettings()
 	{
 	    return array(
@@ -38,14 +60,8 @@ class LiteSpeedCachePlugin extends BasePlugin
 	    );
 	}
 
-	private $elementIds;
 
-	public function getSettingsHtml()
-	{
-	   return craft()->templates->render('litespeedcache/settings', array(
-	       'settings' => $this->getSettings(),
-	   ));
-	}
+	private $elementIds;
 
 	public function init()
 	{
