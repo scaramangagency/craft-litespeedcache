@@ -11,7 +11,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '1.3.1';
+		return '1.3.2';
 	}
 
 	public function getDeveloper()
@@ -41,7 +41,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 
 	public function getReleaseFeedUrl()
 	{
-	    return 'https://github.com/thoughtfulweb/craft-litespeedcache/master/releases.json';
+	    return 'https://raw.githubusercontent.com/thoughtfulweb/craft-litespeedcache/master/releases.json';
 	}
 
 	public function getSettingsHtml()
