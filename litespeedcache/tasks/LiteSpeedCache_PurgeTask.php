@@ -6,112 +6,117 @@ namespace Craft;
 class LiteSpeedCache_PurgeTask extends BaseTask
 {
 
-  // Properties
-  // =========================================================================
+	// Properties
+	// =========================================================================
 
-  /**
-   * @var
-   */
-  private $_paths;
-
-
-  // Public Methods
-  // =========================================================================
+	/**
+	 * @var
+	 */
+	private $_paths;
 
 
-  /**
-   * @inheritDoc ITask::getDescription()
-   *
-   * @return string
-   */
-  public function getDescription()
-  {
-    return Craft::t('Purging the LS Cache');
-  }
-
-  /**
-   * @inheritDoc ITask::getTotalSteps()
-   *
-   * @return int
-   */
-  public function getTotalSteps()
-  {
+	// Public Methods
+	// =========================================================================
 
 
-    // Get the actual paths out of the settings
-    $paths = $this->getSettings()->paths;
+	/**
+	 * @inheritDoc ITask::getDescription()
+	 *
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		return Craft::t('Purging the LS Cache...');
+	}
 
-    // Make our internal paths array
-    $this->_paths = array();
+	/**
+	 * @inheritDoc ITask::getTotalSteps()
+	 *
+	 * @return int
+	 */
+	public function getTotalSteps()
+	{
 
-    // Split the $paths array into chunks of 20 - each step
-    // will be a batch of 20 requests
-    $this->_paths = array_chunk($paths, 20);
 
-    // Count our final chunked array
-    return count($this->_paths);
-  }
+		// Get the actual paths out of the settings
+		$paths = $this->getSettings()->paths;
 
-  /**
-   * @inheritDoc ITask::runStep()
-   *
-   * @param int $step
-   *
-   * @return bool
-   */
-  public function runStep($step)
-  {
+		// Make our internal paths array
+		$this->_paths = array();
 
-    // Loop the paths in this step
+		// Split the $paths array into chunks of 20 - each step
+		// will be a batch of 20 requests
+		$this->_paths = array_chunk($paths, 20);
 
-    $mh = curl_multi_init();
+		// Count our final chunked array
+		return count($this->_paths);
+	}
 
-    foreach ($this->_paths[$step] as $key=>$path)
-    {
-      $ch[$key] = curl_init();
+	/**
+	 * @inheritDoc ITask::runStep()
+	 *
+	 * @param int $step
+	 *
+	 * @return bool
+	 */
+	public function runStep($step)
+	{
 
-      // Set query data here with the URL
-      curl_setopt($ch[$key], CURLOPT_URL, $path);
-      curl_setopt($ch[$key], CURLOPT_RETURNTRANSFER, 1);
-      curl_setopt($ch[$key], CURLOPT_TIMEOUT, 3);
+		// Loop the paths in this step
 
-      curl_setopt($ch[$key], CURLOPT_CUSTOMREQUEST, "PURGE");
-      $remove = craft()->db->createCommand()->delete('lsclearance', 'path=:path', array(':path'=>$path));
+		$mh = curl_multi_init();
 
-      curl_multi_add_handle($mh, $ch[$key]);
-    }
+		foreach ($this->_paths[$step] as $key=>$path)
+		{
+			LiteSpeedCachePlugin::log('Purging URL: ' . $path);
 
-    do {
-      curl_multi_exec($mh, $running);
-      curl_multi_select($mh);
-    } while ($running > 0);
+			$ch[$key] = curl_init();
 
-    foreach(array_keys($ch) as $key){
-      curl_multi_remove_handle($mh, $ch[$key]);
-    }
+			// Set query data here with the URL
+			curl_setopt($ch[$key], CURLOPT_URL, $path);
+			// curl_setopt($ch[$key], CURLOPT_VERBOSE, true);
+			// $fp = fopen(dirname(__FILE__).'/curl-log'.$key.'.txt', 'w');
+			// curl_setopt($ch[$key], CURLOPT_STDERR, $fp);
+			curl_setopt($ch[$key], CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch[$key], CURLOPT_TIMEOUT, 3);
 
-    curl_multi_close($mh);
+			curl_setopt($ch[$key], CURLOPT_CUSTOMREQUEST, "PURGE");
+			$remove = craft()->db->createCommand()->delete('lsclearance', 'path=:path', array(':path'=>$path));
 
-    return true;
+			curl_multi_add_handle($mh, $ch[$key]);
+		}
 
-  }
+		do {
+			curl_multi_exec($mh, $running);
+			curl_multi_select($mh);
+		} while ($running > 0);
 
-  // Protected Methods
-  // =========================================================================
+		foreach(array_keys($ch) as $key){
+			curl_multi_remove_handle($mh, $ch[$key]);
+		}
 
-  /**
-   * @inheritDoc BaseSavableComponentType::defineSettings()
-   *
-   * @return array
-   */
-  protected function defineSettings()
-  {
-    return array(
-      'paths'  => AttributeType::Mixed
-    );
-  }
+		curl_multi_close($mh);
 
-  // Private Methods
-  // =========================================================================
+		return true;
+
+	}
+
+	// Protected Methods
+	// =========================================================================
+
+	/**
+	 * @inheritDoc BaseSavableComponentType::defineSettings()
+	 *
+	 * @return array
+	 */
+	protected function defineSettings()
+	{
+		return array(
+			'paths'  => AttributeType::Mixed
+		);
+	}
+
+	// Private Methods
+	// =========================================================================
 
 }

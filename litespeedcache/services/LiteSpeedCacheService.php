@@ -26,7 +26,7 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	 */
 	public function getPaths($element)
 	{
-		$elementId = $element[0]->id;
+		$elementId = $element->id;
 
 		// What type of element(s) are we dealing with?
 		$this->_elementType = craft()->elements->getElementTypeById($elementId);
@@ -85,19 +85,8 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 			}
 			else
 			{
-				// Create an ElementCriteriaModel that resembles the one that led to this query
-				$params = JsonHelper::decode($row['criteria']);
-				$criteria = craft()->elements->getCriteria($row['type'], $params);
-				// Chance overcorrecting a little for the sake of templates with pending elements,
-				// whose caches should be recreated (see http://craftcms.stackexchange.com/a/2611/9)
-				$criteria->status = null;
-				// See if any of the updated elements would get fetched by this query
-				if (array_intersect($criteria->ids(), $this->_elementIds))
-				{
-					// Delete this cache
-					$this->_cacheIdsToBeDeleted[] = $row['cacheId'];
-					$this->_totalCriteriaRowsToBeDeleted++;
-				}
+				$this->_cacheIdsToBeDeleted[] = $row['cacheId'];
+				$this->_totalCriteriaRowsToBeDeleted++;
 			}
 
 		}
@@ -120,6 +109,7 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 				->from('templatecaches')
 				->where(array('in', 'id', $this->_cacheIdsToBeDeleted))
 				->queryAll();
+
 
 			// Return an array of them
 			if ($paths) {
@@ -176,36 +166,9 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	 */
 	public function makeTask($taskName, $paths)
 	{
-		// If there are any pending tasks, just append the paths to it
-		$task = craft()->tasks->getNextPendingTask($taskName);
-		if ($task && is_array($task->settings))
-		{
-			$settings = $task->settings;
-			if (!is_array($settings['paths']))
-			{
-				$settings['paths'] = array($settings['paths']);
-			}
-			if (is_array($paths))
-			{
-				$settings['paths'] = array_merge($settings['paths'], $paths);
-			}
-			else
-			{
-				$settings['paths'][] = $paths;
-			}
-			// Make sure there aren't any duplicate paths
-			$settings['paths'] = array_unique($settings['paths']);
-			// Set the new settings and save the task
-			$task->settings = $settings;
-			craft()->tasks->saveTask($task, false);
-		}
-		else
-		{
-
-			craft()->tasks->createTask($taskName, null, array(
-				'paths' => $paths
-			));
-		}
+		craft()->tasks->createTask($taskName, null, array(
+			'paths' => $paths
+		));
 	}
 
 	public function buildPaths($taskName, $element) {

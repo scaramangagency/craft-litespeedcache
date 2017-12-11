@@ -33,6 +33,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 	{
 	    return array(
 	        'lsPerUrl' => array(AttributeType::String, 'default' => 0),
+	        'lsCacheLoc' => array(AttributeType::String),
 	        'elementIds' => AttributeType::Mixed
 	    );
 	}
@@ -58,60 +59,25 @@ class LiteSpeedCachePlugin extends BasePlugin
 		});
 
 		/**
-		 * Run the PURGE commands as a batched task
+		 * If we have Craft Commerce installed, purge the entire cache, as it doesn't run through the standard onSaveEntry
 		 */
-			craft()->on('commerce_products.onSaveProduct', function(Event $event)
-			{
-				// If we are clearing per URL
-				if ($this->getSettings()->lsPerUrl) {
-
-					$paths = craft()->liteSpeedCache->buildPaths('LiteSpeedCache_Paths', $this->elementIds);
-					// craft()->liteSpeedCache->makeTask('LiteSpeedCache_Build', $paths);
-
-					// $paths = craft()->db->createCommand()
-					//           ->selectDistinct('path, id, locale')
-					//           ->from('lsclearance')
-					//           ->queryAll();
-
-					// $cleanPaths = [];
-
-					// foreach ($paths as $path)
-					// {
-					// 	$cleanPaths[] = $path['path'];
-					// }
-
-					// craft()->liteSpeedCache->makeTask('LiteSpeedCache_Purge', $cleanPaths);
-
-				} else {
-					$dir = '../.lscache';
-
-					craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
-				}
-			});
+		craft()->on('commerce_products.onSaveProduct', function(Event $event)
+		{
+			craft()->liteSpeedCache->destroyLiteSpeedCache($this->getSettings()->lsCacheLoc);
+		});
 
 		craft()->on('entries.onSaveEntry', function(Event $event)
 		{
 			// If we are clearing per URL
 			if ($this->getSettings()->lsPerUrl) {
 
-				$paths = craft()->db->createCommand()
-				          ->selectDistinct('path, id, locale')
-				          ->from('lsclearance')
-				          ->queryAll();
+				craft()->liteSpeedCache->buildPaths('LiteSpeedCache_Paths', $this->elementIds);
 
-				$cleanPaths = [];
-
-				foreach ($paths as $path)
-				{
-					$cleanPaths[] = $path['path'];
-				}
-
-				craft()->liteSpeedCache->makeTask('LiteSpeedCache_Purge', $cleanPaths);
 
 			} else {
-				$dir = '../.lscache';
 
-				craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
+				craft()->liteSpeedCache->destroyLiteSpeedCache($this->getSettings()->lsCacheLoc);
+
 			}
 		});
 	}

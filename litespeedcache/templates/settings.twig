@@ -9,3 +9,12 @@
         on: (settings.lsPerUrl is defined) ? settings.lsPerUrl : ""
     })
 }}
+
+{{  forms.textField({
+        label: ".lscache location"|t,
+        id: 'lsCacheLoc',
+        name: 'lsCacheLoc',
+        value: settings.lsCacheLoc,
+        required: true
+    })
+}}

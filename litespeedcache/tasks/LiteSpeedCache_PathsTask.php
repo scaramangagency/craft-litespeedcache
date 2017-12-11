@@ -26,7 +26,7 @@ class LiteSpeedCache_PathsTask extends BaseTask
    */
   public function getDescription()
   {
-    return Craft::t('Retrieving cached elements');
+    return Craft::t('Retrieving cached elements...');
   }
 
   /**
@@ -36,8 +36,18 @@ class LiteSpeedCache_PathsTask extends BaseTask
    */
   public function getTotalSteps()
   {
+    // Get the actual paths out of the settings
+    $paths = $this->getSettings()->element;
 
-    return 1;
+    // Make our internal paths array
+    $this->_paths = array();
+
+    // Split the $paths array into chunks of 20 - each step
+    // will be a batch of 20 requests
+    $this->_paths = array_chunk($paths, 20);
+
+    // Count our final chunked array
+    return count($this->_paths);
   }
 
   /**
@@ -50,70 +60,13 @@ class LiteSpeedCache_PathsTask extends BaseTask
   public function runStep($step)
   {
 
-    $paths = craft()->liteSpeedCache->getPaths($this->getSettings()->element);
+    foreach ($this->_paths[$step] as $path) {
 
-    foreach ($paths as $path) {
-      // If one of the records has been tagged as global, delete the lot
-      if (strpos($path['cacheKey'], 'global%%') !== false) {
-        $dir = '../.lscache';
+        $ourPaths = craft()->liteSpeedCache->getPaths($path);
 
-        craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
-        return true;
-      }
+        craft()->liteSpeedCache->makeTask('LiteSpeedCache_Build', $ourPaths);
 
-      if (is_null($path['locale'])) {
-        $path['locale'] = craft()->i18n->getPrimarySiteLocale();
-      }
-
-      // Otherwise get the URL from the cacheKey
-      // (which needs the key to be craft.request.path)
-      $newPath = explode('%%', $path['cacheKey']);
-
-      // Add the locale to the URL if we need to
-      if ($path['locale'] != craft()->i18n->getPrimarySiteLocale()) {
-        $newPath = UrlHelper::getSiteUrl($newPath[0], null, null, $path['locale']);
-      } else {
-        $newPath = UrlHelper::getSiteUrl($newPath[0]);
-      }
-
-      LiteSpeedCachePlugin::log($newPath);
-
-      if (!in_array($newPath, $result)) {
-        $cleanPaths[] = $newPath;
-        $urls[] = array($newPath, $path['locale']);
-      }
     }
-
-
-
-    $result = craft()->db->createCommand()->insertAll('lsclearance', array('path', 'locale'), $urls);
-
-    foreach ($cleanPaths as $key=>$path)
-    {
-      $ch[$key] = curl_init();
-
-      // Set query data here with the URL
-      curl_setopt($ch[$key], CURLOPT_URL, $path);
-      curl_setopt($ch[$key], CURLOPT_RETURNTRANSFER, 1);
-      curl_setopt($ch[$key], CURLOPT_TIMEOUT, 3);
-
-      curl_setopt($ch[$key], CURLOPT_CUSTOMREQUEST, "PURGE");
-      // $remove = craft()->db->createCommand()->delete('lsclearance', 'path=:path', array(':path'=>$path));
-
-      curl_multi_add_handle($mh, $ch[$key]);
-    }
-
-    do {
-      curl_multi_exec($mh, $running);
-      curl_multi_select($mh);
-    } while ($running > 0);
-
-    foreach(array_keys($ch) as $key){
-      curl_multi_remove_handle($mh, $ch[$key]);
-    }
-
-    curl_multi_close($mh);
-
 
     return true;
   }
