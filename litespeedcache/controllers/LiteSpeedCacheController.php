@@ -11,9 +11,7 @@ class LiteSpeedCacheController extends BaseController
    */
 	public function actionClearLiteSpeedCache()
 	{
-		$dir = '../.lscache';
-
-		craft()->liteSpeedCache->destroyLiteSpeedCache($dir);
+		craft()->liteSpeedCache->destroyLiteSpeedCache(craft()->plugins->getPlugin('liteSpeedCache')->getSettings()->lsCacheLoc);
 		craft()->userSession->setNotice(Craft::t('LiteSpeed cache cleared.'));
 		return $this->redirectToPostedUrl();
 	}

@@ -1,5 +1,13 @@
 [
     {
+        "version": "1.3.3",
+        "downloadUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/archive/master.zip",
+        "date": "2017-12-11T17:14:52+00:00",
+        "notes": [
+            "[Fixed] Pull .lscache setting path on manual purge action."
+        ]
+    },
+    {
         "version": "1.3.2",
         "downloadUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/archive/master.zip",
         "date": "2017-12-11T16:52:17+00:00",
