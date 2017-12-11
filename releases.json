@@ -2,6 +2,14 @@
     {
         "version": "1.3.0",
         "downloadUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/archive/master.zip",
+        "date": "2017-12-11T16:50:04+00:00",
+        "notes": [
+            "[Fixed] Fix documentation URL."
+        ]
+    },
+    {
+        "version": "1.3.0",
+        "downloadUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/archive/master.zip",
         "date": "2017-12-11T00:00:00+00:00",
         "notes": [
             "[Added] Add release feed."
