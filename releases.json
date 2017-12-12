@@ -4,7 +4,7 @@
         "downloadUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/archive/master.zip",
         "date": "2017-12-12T16:35:38+00:00",
         "notes": [
-            "[Added] Add to existing task if one already exists."
+            "[Added] Add to existing task if one already exists.",
             "[Fixed] Move path generator to onBeforeSaveElement to ensure paths are grabbed before cache is deleted.",
             "[Fixed] Pull .lscache setting path on global purge if a global is encountered."
         ]
