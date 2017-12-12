@@ -11,7 +11,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '1.3.2';
+		return '1.4.0';
 	}
 
 	public function getDeveloper()
