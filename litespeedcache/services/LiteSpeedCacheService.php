@@ -166,9 +166,35 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 	 */
 	public function makeTask($taskName, $paths)
 	{
-		craft()->tasks->createTask($taskName, null, array(
-			'paths' => $paths
-		));
+		// If there are any pending tasks, just append the paths to it
+		$task = craft()->tasks->getNextPendingTask($taskName);
+		if ($task && is_array($task->settings))
+		{
+			$settings = $task->settings;
+
+			if (!is_array($settings['paths']))
+			{
+				$settings['paths'] = array($settings['paths']);
+			}
+			if (is_array($paths))
+			{
+				$settings['paths'] = array_merge($settings['paths'], $paths);
+			}
+			else
+			{
+				$settings['paths'][] = $paths;
+			}
+
+			// Set the new settings and save the task
+			$task->settings = $settings;
+			craft()->tasks->saveTask($task, false);
+		}
+		else
+		{
+			craft()->tasks->createTask($taskName, null, array(
+				'paths' => $paths
+			));
+		}
 	}
 
 	public function buildPaths($taskName, $element) {
