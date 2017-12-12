@@ -73,7 +73,7 @@ class LiteSpeedCache_BuildTask extends BaseTask
             // If one of the records has been tagged as global, delete the lot
             if (strpos($path['cacheKey'], 'global%%') !== false) {
 
-                craft()->liteSpeedCache->destroyLiteSpeedCache($this->getSettings()->lsCacheLoc);
+                craft()->liteSpeedCache->destroyLiteSpeedCache(craft()->plugins->getPlugin('liteSpeedCache')->getSettings()->lsCacheLoc);
 
                 return true;
             }
