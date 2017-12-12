@@ -118,7 +118,7 @@ class LiteSpeedCacheService extends BaseApplicationComponent
 					$paths = array($paths);
 				}
 
-				return $paths;
+				return craft()->liteSpeedCache->makeTask('LiteSpeedCache_Build', $paths);
 			} else {
 				return false;
 			}

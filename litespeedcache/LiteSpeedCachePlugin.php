@@ -70,12 +70,13 @@ class LiteSpeedCachePlugin extends BasePlugin
 		 */
 		craft()->on('elements.onBeforeSaveElement', function(Event $event)
 		{
-			// If we are clearing per URL
-			$this->elementIds[] = $event->params['element'];
+
+			craft()->liteSpeedCache->getPaths($event->params['element']);
+
 		});
 
 		/**
-		 * If we have Craft Commerce installed, purge the entire cache, as it doesn't run through the standard onSaveEntry
+		 * If we have Craft Commerce installed, purge the entire cache, as it doesn't run through the standard onBeforeSaveEntry
 		 */
 		craft()->on('commerce_products.onSaveProduct', function(Event $event)
 		{
@@ -85,12 +86,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 		craft()->on('entries.onSaveEntry', function(Event $event)
 		{
 			// If we are clearing per URL
-			if ($this->getSettings()->lsPerUrl) {
-
-				craft()->liteSpeedCache->buildPaths('LiteSpeedCache_Paths', $this->elementIds);
-
-
-			} else {
+			if (!$this->getSettings()->lsPerUrl) {
 
 				craft()->liteSpeedCache->destroyLiteSpeedCache($this->getSettings()->lsCacheLoc);
 
