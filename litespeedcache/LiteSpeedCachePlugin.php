@@ -11,7 +11,7 @@ class LiteSpeedCachePlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '1.4.0';
+		return '1.4.1';
 	}
 
 	public function getDeveloper()
@@ -71,7 +71,9 @@ class LiteSpeedCachePlugin extends BasePlugin
 		craft()->on('elements.onBeforeSaveElement', function(Event $event)
 		{
 
-			craft()->liteSpeedCache->getPaths($event->params['element']);
+			if (!$this->getSettings()->lsPerUrl) {
+				craft()->liteSpeedCache->getPaths($event->params['element']);
+			}
 
 		});
 

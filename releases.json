@@ -1,5 +1,13 @@
 [
     {
+        "version": "1.4.1",
+        "downloadUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/archive/master.zip",
+        "date": "2017-12-15T09:38:41+00:00",
+        "notes": [
+            "[Fixed] Don't run per-URL purge if the setting isn't turned on."
+        ]
+    },
+    {
         "version": "1.4.0",
         "downloadUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/archive/master.zip",
         "date": "2017-12-12T16:35:38+00:00",
