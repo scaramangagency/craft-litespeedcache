@@ -42,3 +42,5 @@ We'd recommend setting `globally` to reduce the amount of cache records that you
 This plugin does run the LSCache clearances as a batched task, so hopefully it shouldn't be too intensive on the server. If you're noticing massive latency issues, it might be worth selecting the global purging option.
 
 If you're running CraftCommerce, the plugin will globally purge for now.
+
+**You cannot use CloudFlare and still use per-URL purging. Either do not route through CloudFlare, or just enable the global purge.**
