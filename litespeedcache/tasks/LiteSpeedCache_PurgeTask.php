@@ -63,8 +63,13 @@ class LiteSpeedCache_PurgeTask extends BaseTask
 	{
 
 		// Loop the paths in this step
-
 		$mh = curl_multi_init();
+
+		$upOne = realpath(__DIR__ . '/..');
+		if (!is_dir($upOne.'/logs')) {
+			mkdir($upOne.'/logs', 0777, true);
+		}
+		array_map('unlink', glob($upOne.'/logs/*'));
 
 		foreach ($this->_paths[$step] as $key=>$path)
 		{
@@ -74,9 +79,9 @@ class LiteSpeedCache_PurgeTask extends BaseTask
 
 			// Set query data here with the URL
 			curl_setopt($ch[$key], CURLOPT_URL, $path);
-			// curl_setopt($ch[$key], CURLOPT_VERBOSE, true);
-			// $fp = fopen(dirname(__FILE__).'/curl-log'.$key.'.txt', 'w');
-			// curl_setopt($ch[$key], CURLOPT_STDERR, $fp);
+			curl_setopt($ch[$key], CURLOPT_VERBOSE, true);
+			$fp = fopen($upOne.'/logs/curl-log'.$key.'.txt', 'w');
+			curl_setopt($ch[$key], CURLOPT_STDERR, $fp);
 			curl_setopt($ch[$key], CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch[$key], CURLOPT_TIMEOUT, 3);
 
