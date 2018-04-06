@@ -11,8 +11,8 @@
         "litespeed cache"
     ],
     "support": {
-        "docs": "https://github.com/thoughtfulweb/lite-speed-cache/blob/master/README.md",
-        "issues": "https://github.com/thoughtfulweb/lite-speed-cache/issues"
+        "docs": "https://github.com/thoughtfulweb/craft-litespeedcache/tree/3.0.0",
+        "issues": "https://github.com/thoughtfulweb/craft-litespeedcache/issues"
     },
     "license": "MIT",
     "authors": [
