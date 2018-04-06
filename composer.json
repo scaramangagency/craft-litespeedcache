@@ -30,6 +30,7 @@
         }
     },
     "extra": {
+        "documentationUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/tree/3.0.0",
         "name": "LiteSpeed Cache",
         "handle": "lite-speed-cache",
         "hasCpSettings": true,
