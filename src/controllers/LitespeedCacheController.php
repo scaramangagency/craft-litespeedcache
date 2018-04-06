@@ -10,12 +10,13 @@
 
 namespace thoughtfulweb\litespeedcache\controllers;
 
-use thoughtfulweb\litespeedcache\LitespeedCache;
-use thoughtfulweb\litespeedcache\services\LitespeedCacheService;
-use thoughtfulweb\litespeedcache\models\Settings;
-
 use Craft;
 use craft\web\Controller;
+
+use thoughtfulweb\litespeedcache\LitespeedCache;
+use thoughtfulweb\litespeedcache\services\ClearCache;
+use thoughtfulweb\litespeedcache\models\Settings;
+
 
 /**
  * @author    Thoughtful Web
@@ -51,7 +52,7 @@ class LitespeedCacheController extends Controller
     {
       $settings = LitespeedCache::$plugin->getSettings();
 
-      LitespeedCache::$plugin->clearcache->destroyLiteSpeedCache($settings);
+      LitespeedCache::$plugin->clearCache->destroyLiteSpeedCache($settings['lsCacheLoc']);
       Craft::$app->getSession()->setNotice(Craft::t('app', 'LiteSpeed cache cleared.'));
       return $this->redirectToPostedUrl();
     }

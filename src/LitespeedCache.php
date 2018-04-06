@@ -10,8 +10,6 @@
 
 namespace thoughtfulweb\litespeedcache;
 
-use thoughtfulweb\litespeedcache\services\LitespeedCacheService as LSCache;
-use thoughtfulweb\litespeedcache\models\Settings;
 
 use Craft;
 use craft\base\Element;
@@ -19,9 +17,12 @@ use craft\base\Plugin;
 use craft\elements\Entry;
 use craft\events\ElementEvent;
 use craft\services\Elements;
-
+use craft\web\Controller;
 use craft\web\UrlManager;
 use craft\events\RegisterUrlRulesEvent;
+
+use thoughtfulweb\litespeedcache\models\Settings;
+use thoughtfulweb\litespeedcache\services\ClearCache;
 
 use yii\base\Event;
 
@@ -50,7 +51,7 @@ class LitespeedCache extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '0.1.2';
+    public $schemaVersion = '1.0.0';
 
     // Public Methods
     // =========================================================================
@@ -63,11 +64,15 @@ class LitespeedCache extends Plugin
         parent::init();
         self::$plugin = $this;
 
+        $this->setComponents([
+            'clearCache' => ClearCache::class
+        ]);
+
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['lite-speed-cache/litespeedcache/forceClear'] = 'lite-speed-cache/litespeedcache/forceClear';
+                $event->rules['lite-speed-cache/litespeed-cache/force-clear'] = 'lite-speed-cache/litespeed-cache/forceClear';
             }
         );
 
@@ -77,8 +82,7 @@ class LitespeedCache extends Plugin
             function (ElementEvent $event) {
 
                 $settings = LitespeedCache::$plugin->getSettings();
-
-                LitespeedCache::$plugin->clearcache->destroyLiteSpeedCache($settings);
+                LitespeedCache::$plugin->clearCache->destroyLiteSpeedCache($settings['lsCacheLoc']);
             }
         );
 

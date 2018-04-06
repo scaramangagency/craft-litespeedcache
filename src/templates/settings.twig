@@ -15,8 +15,6 @@
 
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("thoughtfulweb\\litespeedcache\\assetbundles\\litespeedcache\\LitespeedCacheAsset") %}
-
 {{ forms.textField({
     label: '.lscache Location',
     instructions: 'Enter the full absolute path to your LS Cache directory.',

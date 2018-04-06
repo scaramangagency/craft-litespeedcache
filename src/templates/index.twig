@@ -16,9 +16,6 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("thoughtfulweb\\litespeedcache\\assetbundles\\litespeedcache\\LitespeedCacheAsset") %}
-{% do view.registerAssetBundle("thoughtfulweb\\litespeedcache\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
-
 {% set docsUrl = "https://github.com/thoughtfulweb/lite-speed-cache/blob/master/README.md" %}
 
 {% set title = "LiteSpeed Cache" %}
@@ -30,9 +27,9 @@
 {% set content %}
     <h2>Force Clear LiteSpeed Cache</h2>
     <form method="post" action="">
-        {{ getCsrfInput() }}
-        <input type="hidden" name="action" value="lite-speed-cache/litespeedcache/forceClear" />
-        <input type="hidden" name="redirect" value="lite-speed-cache" />
+        {{ csrfInput() }}
+        <input type="hidden" name="action" value="lite-speed-cache/litespeed-cache/force-clear" />
+        {{ redirectInput('lite-speed-cache') }}
         <div class="buttons">
           <input type="submit" class="btn submit" value="{{ 'Clear LiteSpeed Cache'|t }}">
         </div>

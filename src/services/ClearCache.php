@@ -38,7 +38,7 @@ class ClearCache extends Component
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
                     if (is_dir($dir."/".$object))
-                        LitespeedCache::$plugin->clearcache->destroyLiteSpeedCache($dir."/".$object,$odir);
+                        LitespeedCache::$plugin->clearCache->destroyLiteSpeedCache($dir."/".$object,$odir);
                     else
                         unlink($dir."/".$object);
                     }
