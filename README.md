@@ -20,6 +20,22 @@ To install the plugin, search for **LiteSpeed Cache** on the Plugin store, or in
 
 Choose whether or not to clear caches by URL, and set the directory where your LSCache folder is located in the plugin settings. If you do not select the per-URL option, the entire LSCache folder will be destroyed on every page save.
 
+If you have forms on your website and you're using CSRF protection, you'll want to ensure you do not cache the form page, as that will cache the CSRF tokens too. You can either inject the CSRF dyamically
+
+````
+{% js %}
+    $(function() {
+        $('form.csrf').prepend('<input type="hidden" name="{{ craft.app.config.general.csrfTokenName }}" value="{{ craft.app.request.getCsrfToken }}" />');
+    });
+{% endjs %}
+````
+
+or you can choose to not cache the page at all using the following Twig header
+
+````
+{% header "X-LiteSpeed-Cache-Control: no-cache" %}
+````
+
 ## Requirements
 
 This plugin requires Craft CMS 3.0.0 or later.
