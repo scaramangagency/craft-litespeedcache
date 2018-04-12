@@ -24,7 +24,7 @@ Choose whether or not to clear caches by URL, and set the directory where your L
 
 This plugin requires Craft CMS 3.0.0 or later.
 
-## Notes
+## Notes
 
 Due to CloudFlare being a reverse proxy, ou cannot use CloudFlare and still use per-URL purging. Either do not route through CloudFlare, or just enable the global purge.
 
