@@ -1,5 +1,9 @@
 # Solspace Freeform Changelog
 
+## 1.1.2 - 2018-04-12
+### Fixed
+- Fix composer version number
+
 ## 1.1.1 - 2018-04-12
 ### Fixed
 - Fix required craftcms/cms version
