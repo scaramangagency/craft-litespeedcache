@@ -28,6 +28,7 @@ class Settings extends Model
      * @var string
      */
     public $lsCacheLoc = '';
+    public $lsPerUrl = '';
 
     // Public Methods
     // =========================================================================
@@ -40,6 +41,8 @@ class Settings extends Model
         return [
             ['lsCacheLoc', 'string'],
             ['lsCacheLoc', 'default', 'value' => ''],
+            ['lsPerUrl', 'boolean'],
+            ['lsPerUrl', 'default', 'value' => 'false'],
         ];
     }
 }

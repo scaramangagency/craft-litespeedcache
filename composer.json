@@ -2,7 +2,7 @@
     "name": "thoughtfulweb/lite-speed-cache",
     "description": "Clear the LiteSpeed cache on page save.",
     "type": "craft-plugin",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "keywords": [
         "craft",
         "cms",
@@ -11,7 +11,7 @@
         "litespeed cache"
     ],
     "support": {
-        "docs": "https://github.com/thoughtfulweb/craft-litespeedcache/tree/3.0.0",
+        "docs": "https://github.com/thoughtfulweb/craft-litespeedcache/",
         "issues": "https://github.com/thoughtfulweb/craft-litespeedcache/issues"
     },
     "license": "MIT",
@@ -30,7 +30,7 @@
         }
     },
     "extra": {
-        "documentationUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/tree/3.0.0",
+        "documentationUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/",
         "name": "LiteSpeed Cache",
         "handle": "lite-speed-cache",
         "hasCpSettings": true,

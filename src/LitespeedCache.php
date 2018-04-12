@@ -20,9 +20,13 @@ use craft\services\Elements;
 use craft\web\Controller;
 use craft\web\UrlManager;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\DeleteTemplateCachesEvent;
+use craft\services\TemplateCaches;
 
 use thoughtfulweb\litespeedcache\models\Settings;
 use thoughtfulweb\litespeedcache\services\ClearCache;
+use thoughtfulweb\litespeedcache\services\GetElements;
+use thoughtfulweb\litespeedcache\queue\jobs\RunLitespeedPurge;
 
 use yii\base\Event;
 
@@ -64,8 +68,11 @@ class LitespeedCache extends Plugin
         parent::init();
         self::$plugin = $this;
 
+        $settings = LitespeedCache::$plugin->getSettings();
+
         $this->setComponents([
-            'clearCache' => ClearCache::class
+            'clearCache' => ClearCache::class,
+            'getElements' => GetElements::class
         ]);
 
         Event::on(
@@ -76,15 +83,33 @@ class LitespeedCache extends Plugin
             }
         );
 
-        Event::on(
-            Elements::class,
-            Elements::EVENT_AFTER_SAVE_ELEMENT,
-            function (ElementEvent $event) {
+        if ($settings['lsPerUrl']) {
+            Event::on(
+                TemplateCaches::class,
+                TemplateCaches::EVENT_BEFORE_DELETE_CACHES,
+                function (DeleteTemplateCachesEvent $event) {
 
-                $settings = LitespeedCache::$plugin->getSettings();
-                LitespeedCache::$plugin->clearCache->destroyLiteSpeedCache($settings['lsCacheLoc']);
-            }
-        );
+                    $templateCacheElements = LitespeedCache::$plugin->getElements->returnTemplateCacheElements($event->cacheIds);
+
+                    if (!empty($templateCacheElements)) {
+                        Craft::$app->getQueue()->push(new RunLitespeedPurge([
+                            'elementId' => $templateCacheElements,
+                        ]));
+                    }
+                }
+            );
+        } else {
+            Event::on(
+                Elements::class,
+                Elements::EVENT_AFTER_SAVE_ELEMENT,
+                function (ElementEvent $event) {
+                   LitespeedCache::$plugin->clearCache->destroyLiteSpeedCache($settings['lsCacheLoc']);
+                }
+            );
+        }
+
+
+
 
         Craft::info(
             Craft::t(
