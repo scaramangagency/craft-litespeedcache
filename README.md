@@ -20,7 +20,7 @@ To install the plugin, search for **LiteSpeed Cache** on the Plugin store, or in
 
 Choose whether or not to clear caches by URL, and set the directory where your LSCache folder is located in the plugin settings. If you do not select the per-URL option, the entire LSCache folder will be destroyed on every page save.
 
-If you have forms on your website and you're using CSRF protection, you'll want to ensure you do not cache the form page, as that will cache the CSRF tokens too. You can either inject the CSRF dyamically
+If you have forms on your website and you're using CSRF protection, you'll want to ensure you do not cache the form page, as that will cache the CSRF tokens too. You can either inject the CSRF dyamically by adding a `csrf` class (or any other classname) to your form and then using
 
 ````
 {% js %}
@@ -35,6 +35,8 @@ or you can choose to not cache the page at all using the following Twig header
 ````
 {% header "X-LiteSpeed-Cache-Control: no-cache" %}
 ````
+
+**If you use the standard `{{ csrfInput() }}` inline, the tokens will be cached by Litespeed and all of your form submissions will fail.**
 
 ## Requirements
 
