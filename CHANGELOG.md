@@ -1,5 +1,9 @@
 # Solspace Freeform Changelog
 
+## 1.1.3 - 2018-05-02
+### Fixed
+- Fix `Clear caches per URL?` being permanently switched on. Fix error where plugin would not save settings.
+
 ## 1.1.2 - 2018-04-12
 ### Fixed
 - Fix composer version number

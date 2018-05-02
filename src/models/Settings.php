@@ -27,8 +27,8 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $lsCacheLoc = '';
-    public $lsPerUrl = '';
+    public $lsCacheLoc;
+    public $lsPerUrl;
 
     // Public Methods
     // =========================================================================
@@ -36,13 +36,11 @@ class Settings extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function __construct(array $config = [])
     {
-        return [
-            ['lsCacheLoc', 'string'],
-            ['lsCacheLoc', 'default', 'value' => ''],
-            ['lsPerUrl', 'boolean'],
-            ['lsPerUrl', 'default', 'value' => 'false'],
-        ];
+        $this->lsCacheLoc = null;
+        $this->lsPerUrl   = false;
+
+        parent::__construct($config);
     }
 }
