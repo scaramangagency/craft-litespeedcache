@@ -1,5 +1,9 @@
 # Solspace Freeform Changelog
 
+## 1.1.5 - 2018-05-02
+### Updated
+- Add note to explain the use of the Clear Litespeed Cache button.
+
 ## 1.1.4 - 2018-05-02
 ### Fixed
 - Fix error on page save for global PURGE.

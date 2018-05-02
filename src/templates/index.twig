@@ -22,6 +22,7 @@
 
 {% set content %}
     <h2>Force Clear LiteSpeed Cache</h2>
+    <p>This will remove all items in your LiteSpeed Cache folder.</p>
     <form method="post" action="">
         {{ csrfInput() }}
         <input type="hidden" name="action" value="lite-speed-cache/litespeed-cache/force-clear" />

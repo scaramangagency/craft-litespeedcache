@@ -23,7 +23,7 @@ Choose whether or not to clear caches by URL, and set the directory where your L
 
 ### Manually
 
-If you just want to clear the whole cache folder at once to build an entirely new cache, you can go opt to **Force Clear LiteSpeed Cache** in the plugins CP section. Clicking the clear button will remove the entire LSCache folder's contents.
+If you just want to nuke the whole cache folder at once, you can go opt to **Force Clear LiteSpeed Cache** in the plugins CP section. Clicking the clear button will remove all items in the LSCache folder.
 
 ### Forms
 
