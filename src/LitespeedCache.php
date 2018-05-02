@@ -83,6 +83,7 @@ class LitespeedCache extends Plugin
             }
         );
 
+
         if ($settings['lsPerUrl']) {
             Event::on(
                 TemplateCaches::class,
@@ -103,12 +104,11 @@ class LitespeedCache extends Plugin
                 Elements::class,
                 Elements::EVENT_AFTER_SAVE_ELEMENT,
                 function (ElementEvent $event) {
-                   LitespeedCache::$plugin->clearCache->destroyLiteSpeedCache($settings['lsCacheLoc']);
+                    $settings = LitespeedCache::$plugin->getSettings();
+                    LitespeedCache::$plugin->clearCache->destroyLiteSpeedCache($settings['lsCacheLoc']);
                 }
             );
         }
-
-
 
 
         Craft::info(

@@ -1,5 +1,9 @@
 # Solspace Freeform Changelog
 
+## 1.1.4 - 2018-05-02
+### Fixed
+- Fix error on page save for global PURGE.
+
 ## 1.1.3 - 2018-05-02
 ### Fixed
 - Fix `Clear caches per URL?` being permanently switched on. Fix error where plugin would not save settings.
