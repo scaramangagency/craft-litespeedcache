@@ -44,7 +44,7 @@ This plugin requires Craft CMS 3.0.0 or later.
 
 ## Notes
 
-The plugin taps into Craft's native caching functionality, so you **must** use `{% cache %}` tags so that a cache record can be found on page save. If you don't have a cache record for the page you're saving, the plugin doesn't know it needs to PURGE that page, so won't.
+If you're using per-URL purging, the plugin taps into Craft's native caching functionality, meaing you **must** use `{% cache %}` tags so that a cache record can be found on page save. If you don't have a cache record for the page you're saving, the plugin doesn't know it needs to PURGE that page, so won't.
 
 This plugin will not be triggered at present from CraftCommerce, as the hook for page saving is different than the standard AFTER_SAVE_ELEMENT, and the class docs aren't available for Commerce 2 yet. The recommendation is to disable the per-URL purging until Commerce is released.
 
