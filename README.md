@@ -18,7 +18,14 @@ To install the plugin, search for **LiteSpeed Cache** on the Plugin store, or in
 
 ## Use
 
+### On Page Save
 Choose whether or not to clear caches by URL, and set the directory where your LSCache folder is located in the plugin settings. If you do not select the per-URL option, the entire LSCache folder will be destroyed on every page save.
+
+### Manually
+
+If you just want to clear the whole cache folder at once to build an entirely new cache, you can go opt to **Force Clear LiteSpeed Cache** in the plugins CP section. Clicking the clear button will remove the entire LSCache folder's contents.
+
+### Forms
 
 If you have forms on your website and you're using CSRF protection, you'll want to ensure you do not cache the form page, as that will cache the CSRF tokens too. You can either inject the CSRF dyamically by adding a `csrf` class (or any other classname) to your form and then using
 
