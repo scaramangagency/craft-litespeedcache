@@ -1,4 +1,4 @@
-# Solspace Freeform Changelog
+# Litespeed Cache Changelog
 
 ## 1.1.6 - 2018-05-02
 ### Updated
