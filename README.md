@@ -19,11 +19,11 @@ To install the plugin, search for **LiteSpeed Cache** on the Plugin store, or in
 ## Use
 
 ### On Page Save
-Choose whether or not to clear caches by URL, and set the directory where your LSCache folder is located in the plugin settings. If you do not select the per-URL option, the entire LSCache folder will be destroyed on every page save.
+Choose whether or not to clear caches by URL, and set the directory where your LSCache folder is located in the plugin settings. If you do not select the per-URL option, all of the cached content in the LSCache folder will be removed on every page save.
 
 ### Manually
 
-If you just want to nuke the whole cache folder at once, you can go opt to **Force Clear LiteSpeed Cache** in the plugins CP section. Clicking the clear button will remove all items in the LSCache folder.
+If you just want to nuke the whole cache folder at once, you can go opt to **Force Clear LiteSpeed Cache** in the plugins CP section. Clicking the clear button will remove all of the cached content in the LSCache folder.
 
 ### Forms
 
