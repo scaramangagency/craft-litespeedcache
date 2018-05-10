@@ -41,8 +41,7 @@ class RunLitespeedPurge extends BaseJob
     /**
      * @inheritdoc
      */
-    public function execute($queue)
-    {
+    public function execute($queue) {
         $slugsToPurge = [];
 
         $currentRow = 0;
@@ -85,8 +84,7 @@ class RunLitespeedPurge extends BaseJob
     /**
      * @inheritdoc
      */
-    protected function defaultDescription(): string
-    {
+    protected function defaultDescription(): string {
         return Craft::t('app', 'Purging Litespeed Cache');
     }
 }

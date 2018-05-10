@@ -30,8 +30,7 @@ class getElements extends Component
     /*
      * @return mixed
      */
-    public function returnTemplateCacheElements($ids)
-    {
+    public function returnTemplateCacheElements($ids) {
         $templateCacheElements = [];
 
         foreach ($ids as $row) {

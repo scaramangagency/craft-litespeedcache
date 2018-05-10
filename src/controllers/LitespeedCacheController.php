@@ -43,13 +43,11 @@ class LitespeedCacheController extends Controller
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
       $this->module = Craft::$app;
     }
 
-    public function actionForceClear()
-    {
+    public function actionForceClear() {
       $settings = LitespeedCache::$plugin->getSettings();
 
       LitespeedCache::$plugin->clearCache->destroyLiteSpeedCache($settings['lsCacheLoc']);

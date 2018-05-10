@@ -28,8 +28,7 @@ class ClearCache extends Component
     /*
      * @return mixed
      */
-    public function destroyLiteSpeedCache($dir, $odir = NULL)
-    {
+    public function destroyLiteSpeedCache($dir, $odir = NULL) {
         if ($odir == NULL) {
             $odir = $dir;
         }
@@ -53,10 +52,9 @@ class ClearCache extends Component
 
     public function purgeLiteSpeedCache($slugs) {
         $mh = curl_multi_init();
+        $ch = array();
 
-        foreach ($slugs as $key=>$path)
-        {
-
+        foreach ($slugs as $key => $path) {
             $ch[$key] = curl_init();
             // Set query data here with the URL
             curl_setopt($ch[$key], CURLOPT_URL, $path);
@@ -64,7 +62,7 @@ class ClearCache extends Component
             curl_setopt($ch[$key], CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch[$key], CURLOPT_TIMEOUT, 3);
             curl_setopt($ch[$key], CURLOPT_CUSTOMREQUEST, "PURGE");
-
+            LitespeedCache::log('Queue URL: '.$path);
             curl_multi_add_handle($mh, $ch[$key]);
         }
 
@@ -73,7 +71,10 @@ class ClearCache extends Component
             curl_multi_select($mh);
         } while ($running > 0);
 
-        foreach(array_keys($ch) as $key) {
+        foreach ($ch as $key => $result) {
+            $resp = curl_getinfo($result, CURLINFO_HTTP_CODE);
+            $url = curl_getinfo($result, CURLINFO_EFFECTIVE_URL);
+            LitespeedCache::log('Attempted to purge URL '.$url.' and got a status code of '. $resp);
             curl_multi_remove_handle($mh, $ch[$key]);
         }
 

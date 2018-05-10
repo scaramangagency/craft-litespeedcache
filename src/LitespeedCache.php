@@ -60,13 +60,22 @@ class LitespeedCache extends Plugin
     // Public Methods
     // =========================================================================
 
+    public static function log($message) {
+        Craft::getLogger()->log($message, \yii\log\Logger::LEVEL_INFO, 'LitespeedCache');
+    }
+
     /**
      * @inheritdoc
      */
-    public function init()
-    {
+    public function init() {
         parent::init();
         self::$plugin = $this;
+
+        $fileTarget = new \craft\log\FileTarget([
+            'logFile' => __DIR__ . '/litespeedCache.log',
+            'categories' => ['LitespeedCache']
+        ]);
+        Craft::getLogger()->dispatcher->targets[] = $fileTarget;
 
         $settings = LitespeedCache::$plugin->getSettings();
 
@@ -94,7 +103,7 @@ class LitespeedCache extends Plugin
 
                     if (!empty($templateCacheElements)) {
                         Craft::$app->getQueue()->push(new RunLitespeedPurge([
-                            'elementId' => $templateCacheElements,
+                            'elementId' => $templateCacheElements
                         ]));
                     }
                 }
@@ -127,16 +136,14 @@ class LitespeedCache extends Plugin
     /**
      * @inheritdoc
      */
-    protected function createSettingsModel()
-    {
+    protected function createSettingsModel() {
         return new Settings();
     }
 
     /**
      * @inheritdoc
      */
-    protected function settingsHtml(): string
-    {
+    protected function settingsHtml(): string {
         return Craft::$app->view->renderTemplate(
             'lite-speed-cache/settings',
             [

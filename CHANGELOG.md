@@ -1,5 +1,12 @@
 # Litespeed Cache Changelog
 
+## 1.2.0 - 2018-05-10
+### Added
+- Added logging for pre-and-post-PURGE to allow for better debugging.
+
+### Fixed
+- Tidied up the coding standards.
+
 ## 1.1.7 - 2018-05-10
 ### Fixed
 - Stop duplicate requests being fired when clearing per-URL.

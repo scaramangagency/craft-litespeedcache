@@ -36,8 +36,7 @@ class Settings extends Model
     /**
      * @inheritdoc
      */
-    public function __construct(array $config = [])
-    {
+    public function __construct(array $config = []) {
         $this->lsCacheLoc = null;
         $this->lsPerUrl   = false;
 
