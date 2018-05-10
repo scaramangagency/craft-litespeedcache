@@ -64,7 +64,9 @@ class RunLitespeedPurge extends BaseJob
 
                     if (sizeof($getEntrySlug)) {
                         if (!is_null($getEntrySlug->uri)) {
-                            array_push($slugsToPurge, UrlHelper::siteUrl($getEntrySlug->uri));
+                            if (!in_array($getEntrySlug->url, $slugsToPurge)) {
+                                array_push($slugsToPurge, UrlHelper::siteUrl($getEntrySlug->uri));
+                            }
                         }
                     }
                 }

@@ -1,6 +1,10 @@
 # Litespeed Cache Changelog
 
-## 1.1.6 - 2018-05-02
+## 1.1.7 - 2018-05-10
+### Fixed
+- Stop duplicate requests being fired when clearing per-URL.
+
+## 1.1.6 - 2018-05-09
 ### Updated
 - Update notes for LSCache location.
 
