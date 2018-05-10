@@ -1,5 +1,9 @@
 # Litespeed Cache Changelog
 
+## 1.2.1 - 2018-05-10
+### Fixed
+- Change to URL over URI for getting the correct PURGE location, as the homepage URI is `__home__` and not `\`.
+
 ## 1.2.0 - 2018-05-10
 ### Added
 - Added logging for pre-and-post-PURGE to allow for better debugging.
