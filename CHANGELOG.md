@@ -2,7 +2,7 @@
 
 ## 1.2.3 - 2018-09-15
 ### Fixed
-- Fix release.
+- Fix release. Fix PHP 7.2 incompatibility with sizeof on non-iterable arrays or objects.
 
 ## 1.2.2 - 2018-09-15
 ### Fixed
