@@ -61,7 +61,7 @@ class RunLitespeedPurge extends BaseJob
                 if ($row['type'] == 'craft\elements\Entry') {
                     $getEntrySlug = Craft::$app->entries->getEntryById($row['id']);
 
-                    if (sizeof($getEntrySlug)) {
+                    if (!is_null($getEntrySlug)) {
                         if (!is_null($getEntrySlug->uri)) {
                             if (!in_array($getEntrySlug->url, $slugsToPurge)) {
                                 array_push($slugsToPurge, $getEntrySlug->url);
