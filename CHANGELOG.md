@@ -1,5 +1,9 @@
 # Litespeed Cache Changelog
 
+## 1.2.3 - 2018-09-15
+### Fixed
+- Fix release.
+
 ## 1.2.2 - 2018-09-15
 ### Fixed
 - Fix PHP 7.2 incompatibility with sizeof on non-iterable arrays or objects.
