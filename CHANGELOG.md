@@ -1,5 +1,9 @@
 # Litespeed Cache Changelog
 
+## 1.2.2 - 2018-09-15
+### Fixed
+- Fix PHP 7.2 incompatibility with sizeof on non-iterable arrays or objects.
+
 ## 1.2.1 - 2018-05-10
 ### Fixed
 - Change to URL over URI for getting the correct PURGE location, as the homepage URI is `__home__` and not `\`.
