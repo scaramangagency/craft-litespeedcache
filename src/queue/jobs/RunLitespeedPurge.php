@@ -11,6 +11,7 @@
 namespace thoughtfulweb\litespeedcache\queue\jobs;
 
 use Craft;
+use craft\db\Table;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\queue\BaseJob;
@@ -53,7 +54,7 @@ class RunLitespeedPurge extends BaseJob
             $getElementType = (new Query())
                     ->select(['fieldLayoutId','type','id'])
                     ->distinct(true)
-                    ->from(['craft_elements'])
+                    ->from([Table::ELEMENTS])
                     ->where(['id' => $row])
                     ->all();
 
