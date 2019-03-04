@@ -1,6 +1,6 @@
 # Litespeed Cache Changelog
 
-## 1.2.5 - 2018-09-15
+## 1.2.5 - 2019-03-04
 ### Fixed
 - Remove hardcoding of craft_elements and craft_templatecaches links. Thanks Jorge.
 
