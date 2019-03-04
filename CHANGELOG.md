@@ -1,5 +1,9 @@
 # Litespeed Cache Changelog
 
+## 1.2.5 - 2018-09-15
+### Fixed
+- Remove hardcoding of craft_elements and craft_templatecaches links. Thanks Jorge.
+
 ## 1.2.3 - 2018-09-15
 ### Fixed
 - Fix release. Fix PHP 7.2 incompatibility with sizeof on non-iterable arrays or objects.
