@@ -13,8 +13,9 @@ namespace thoughtfulweb\litespeedcache\services;
 use thoughtfulweb\litespeedcache\LitespeedCache;
 
 use Craft;
-use craft\base\Component;
+use craft\db\Table;
 use craft\db\Query;
+use craft\base\Component;
 use craft\elements\db\ElementQuery;
 
 /**
@@ -37,7 +38,7 @@ class getElements extends Component
             $getElement = (new Query())
                     ->select(['elementId'])
                     ->distinct(true)
-                    ->from(['craft_templatecacheelements'])
+                    ->from(Table::TEMPLATECACHEELEMENTS)
                     ->where(['cacheId' => $row])
                     ->column();
 
