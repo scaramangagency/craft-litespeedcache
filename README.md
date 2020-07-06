@@ -27,17 +27,20 @@ If you just want to nuke the whole cache folder at once, you can go opt to **For
 
 ### Forms
 
-If you have forms on your website and you're using CSRF protection, you'll want to ensure you do not cache the form page, as that will cache the CSRF tokens too. You can either inject the CSRF dyamically by adding a `csrf` class (or any other classname) to your form and then using
+If you have forms on your website and you're using CSRF protection, you want to:
 
+Make an AJAX call to a plugin/module action that [outputs your CSRF token](https://docs.craftcms.com/api/v3/craft-web-request.html#method-getcsrftoken) and use the resutl to update your CSRF input
 ````
 {% js %}
     $(function() {
-        $('form.csrf').prepend('<input type="hidden" name="{{ craft.app.config.general.csrfTokenName }}" value="{{ craft.app.request.getCsrfToken }}" />');
+        $.get('/your/controller/action', function(data) {
+                $('form.csrf').prepend('<input type="hidden" name="{{ craft.app.config.general.csrfTokenName }}" value="'+data+'" />');
+        });
     });
 {% endjs %}
 ````
 
-or you can choose to not cache the page at all using the following Twig header
+Alternatively, you can choose to not cache the page at all using the following Twig header
 
 ````
 {% header "X-LiteSpeed-Cache-Control: no-cache" %}
