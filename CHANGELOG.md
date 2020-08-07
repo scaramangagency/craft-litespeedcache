@@ -1,5 +1,9 @@
 # Litespeed Cache Changelog
 
+## 1.2.6 - 2020-08-07
+### Fixed
+- Craft 3.5 compatability fix.
+
 ## 1.2.5 - 2019-03-04
 ### Fixed
 - Remove hardcoding of craft_elements and craft_templatecaches links. Thanks Jorge.

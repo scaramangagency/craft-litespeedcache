@@ -27,9 +27,9 @@ If you just want to nuke the whole cache folder at once, you can go opt to **For
 
 ### Forms
 
-If you have forms on your website and you're using CSRF protection, you want to:
+If you have forms on your website and you're using CSRF protection, you want to either:
 
-Make an AJAX call to a plugin/module action that [outputs your CSRF token](https://docs.craftcms.com/api/v3/craft-web-request.html#method-getcsrftoken) and use the result to update your CSRF input.
+1. Make an AJAX call to a plugin/module action that [outputs your CSRF token](https://docs.craftcms.com/api/v3/craft-web-request.html#method-getcsrftoken) and use the result to update your CSRF input.
 ````
 {% js %}
     $(function() {
@@ -40,7 +40,7 @@ Make an AJAX call to a plugin/module action that [outputs your CSRF token](https
 {% endjs %}
 ````
 
-Alternatively, you can choose to not cache the page at all using the following Twig header.
+2. Choose to not cache the page at all using the following Twig header.
 
 ````
 {% header "X-LiteSpeed-Cache-Control: no-cache" %}
