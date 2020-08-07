@@ -4,8 +4,8 @@
  *
  * Clear the LiteSpeed cache on page save.
  *
- * @link      https://thoughtfulweb.com
- * @copyright Copyright (c) 2018 Thoughtful Web
+ * @link      https://scaramanga.agency
+ * @copyright Copyright (c) 2018 Scaramanga Agency
  */
 
 namespace thoughtfulweb\litespeedcache;
@@ -33,7 +33,7 @@ use yii\base\Event;
 /**
  * Class LitespeedCache
  *
- * @author    Thoughtful Web
+ * @author    Scaramanga Agency
  * @package   LitespeedCache
  * @since     0.0.1
  *

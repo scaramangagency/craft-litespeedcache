@@ -4,8 +4,8 @@
  *
  * Clear the LiteSpeed cache on page save.
  *
- * @link      https://thoughtfulweb.com
- * @copyright Copyright (c) 2018 Thoughtful Web
+ * @link      https://scaramanga.agency
+ * @copyright Copyright (c) 2018 Scaramanga Agency
  */
 
 namespace thoughtfulweb\litespeedcache\services;
@@ -16,7 +16,7 @@ use Craft;
 use craft\base\Component;
 
 /**
- * @author    Thoughtful Web
+ * @author    Scaramanga Agency
  * @package   LitespeedCache
  * @since     0.0.1
  */

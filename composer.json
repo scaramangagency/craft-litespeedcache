@@ -11,14 +11,14 @@
         "litespeed cache"
     ],
     "support": {
-        "docs": "https://github.com/thoughtfulweb/craft-litespeedcache/",
-        "issues": "https://github.com/thoughtfulweb/craft-litespeedcache/issues"
+        "docs": "https://github.com/scaramangagency/craft-litespeedcache/",
+        "issues": "https://github.com/scaramangagency/craft-litespeedcache/issues"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": "Thoughtful Web",
-            "homepage": "https://thoughtfulweb.com"
+            "name": "Scaramanga Agency",
+            "homepage": "https://scaramanga.agency"
         }
     ],
     "require": {
@@ -30,7 +30,7 @@
         }
     },
     "extra": {
-        "documentationUrl": "https://github.com/thoughtfulweb/craft-litespeedcache/",
+        "documentationUrl": "https://github.com/scaramangagency/craft-litespeedcache/",
         "name": "LiteSpeed Cache",
         "handle": "lite-speed-cache",
         "hasCpSettings": true,

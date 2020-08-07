@@ -4,8 +4,8 @@
  *
  * Clear the LiteSpeed cache on page save.
  *
- * @link      https://thoughtfulweb.com
- * @copyright Copyright (c) 2018 Thoughtful Web
+ * @link      https://scaramanga.agency
+ * @copyright Copyright (c) 2018 Scaramanga Agency
  */
 
 namespace thoughtfulweb\litespeedcache\queue\jobs;
@@ -23,7 +23,7 @@ use thoughtfulweb\litespeedcache\services\ClearCache;
 /**
  * RunLitespeedPurge job
  *
- * @author    Thoughtful Web
+ * @author    Scaramanga Agency
  * @since 1.1.0
  */
 class RunLitespeedPurge extends BaseJob
