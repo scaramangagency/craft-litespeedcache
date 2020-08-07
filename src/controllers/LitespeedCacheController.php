@@ -38,15 +38,6 @@ class LitespeedCacheController extends Controller
 
     // Public Methods
     // =========================================================================
-
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-      $this->module = Craft::$app;
-    }
-
     public function actionForceClear() {
       $settings = LitespeedCache::$plugin->getSettings();
 
