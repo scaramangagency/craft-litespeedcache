@@ -1,7 +1,7 @@
 
 > :warning: :warning: :warning:
 >
-> This plugin is no longer being actively maintained, and it's broken in Craft 3.5 because of changes to how template caching works.
+> Per-URL cache busting broken in Craft 3.5 because of changes to how template caching works. To use this plugin on this version you will need to clear the entire cache every time.
 
 # CraftCMS LSCache Purge for Craft CMS 3.x
 
