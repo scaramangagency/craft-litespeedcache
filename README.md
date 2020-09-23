@@ -1,3 +1,8 @@
+
+> :warning: :warning: :warning:
+>
+> This plugin is no longer being actively maintained, and it's broken in Craft 3.5 because of changes to how template caching works.
+
 # CraftCMS LSCache Purge for Craft CMS 3.x
 
 PURGE the LiteSpeed Cache on saving entries.
