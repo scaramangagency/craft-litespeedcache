@@ -1,9 +1,9 @@
 
 > :warning: :warning: :warning:
 >
-> Per-URL cache busting broken in Craft 3.5 because of changes to how template caching works. To use this plugin on this version you will need to clear the entire cache every time.
+> Per-URL cache busting is now broken in Craft 3.5 because of changes to how template caching works. You will need to nuke the whole cache on save if you are running 3.5+
 >
-> A fix is unlikely, as we've moved to using [Blitz](https://putyourlightson.com/plugins/blitz) for our caching purposes. We will fix minor issues, but likely won't undertake any major functionality overhauls.
+> This plugin is EOL. Minor patches will be issued, but not major functionality overhauls. PR's gratefully received. For a robust static cache solution, try [Blitz](https://putyourlightson.com/plugins/blitz). 
 
 # CraftCMS LSCache Purge for Craft CMS 3.x
 
