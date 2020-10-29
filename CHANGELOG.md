@@ -1,5 +1,9 @@
 # Litespeed Cache Changelog
 
+## 1.2.7 - 2020-10-29
+### Fixed
+- Composer 2 compatability fix.
+
 ## 1.2.6 - 2020-08-07
 ### Fixed
 - Craft 3.5 compatability fix.
